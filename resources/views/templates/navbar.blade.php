@@ -61,8 +61,8 @@
                         <p> NOME DO USUARIO <small>Membro desde xxxx/xx/xx</small></p>
                     </li>
                     <li class="user-footer">
-                        <a href="#" class="btn btn-default btn-flat">Profile</a>
-                        <a href="#" class="btn btn-default btn-flat float-end">Sign out</a>
+                        <a href="#" class="btn btn-default btn-flat">Perfil</a>
+                        <a href="#" class="btn btn-default btn-flat float-end">Sair</a>
                     </li>
                 </ul>
             </li>

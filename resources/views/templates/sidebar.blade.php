@@ -21,7 +21,7 @@
                     <ul class="nav nav-treeview ms-3">
 
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="{{ route('torradores.index') }}" class="nav-link">
                                 <img src="{{ asset('images/icons/torrador_de_cafe.png') }}" alt="Torrador de Café"
                                     class="nav-icon" style="width: 1.25em; height: 1.25em; object-fit: contain;">
                                 <p>Torradores</p>
