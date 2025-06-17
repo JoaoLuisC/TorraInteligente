@@ -1,0 +1,35 @@
+.hero-header {
+    background-image: url('/images/header-bg.jpeg');
+    background-size: cover;
+    background-position: center;
+    min-height: 40vh;
+    position: relative;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.hero-header::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.45);
+    z-index: 1;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+}
+
+
+/* Adicione ao seu index.css */
+.bg-white {
+    border: none !important;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.07); /* mantém só o shadow, se quiser */
+}
+.bg-white {
+    border: none !important;
+    box-shadow: none !important;
+}

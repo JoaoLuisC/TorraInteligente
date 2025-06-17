@@ -1,29 +1,69 @@
-@extends('master')
-
-@push('styles')
-    @vite('resources/css/auth/register.css')
-@endpush
-
-@section('title', 'Cadastro')
-
-@section('MainContent')
-<main class="container-fluid vh-100">
-    <div class="row h-100">
-        <section class="col-md-6 d-flex align-items-center justify-content-center">
-            <div class="text-center">
-                <h1>A DEFINIR</h1>
-            </div>
-        </section>
-        <section class="col-md-6 bg-green d-flex align-items-center justify-content-center">
-            <div class="form-container">
-                <header class="text-center mb-4">
-                    <div class="image-placeholder mb-3">
-                        <img src="{{ asset('images/imagem_login_page_cafe.png') }}" alt="Cadastro" />
+<!doctype html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8" />
+    <title>Registrar</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="{{ asset('images/graos-de-cafe.png') }}" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="{{ asset('css/Admin_Lte/adminlte.css') }}" />
+</head>
+<body class="register-page bg-body-secondary">
+    <div class="register-box">
+        <div class="register-logo mb-3 text-center">
+            <a href="{{ url('/') }}">
+                <img src="{{ asset('images/logoMichelangelo.png') }}" alt="Michelangelo Logo" style="height: 20vh; margin-bottom: 3vh;">
+            </a>
+        </div>
+        <div class="card">
+            <div class="card-body register-card-body">
+                <p class="register-box-msg">Crie sua conta</p>
+                <form action="{{ route('register') }}" method="post">
+                    @csrf
+                    <div class="input-group mb-3">
+                        <input type="text" name="firstName" class="form-control" placeholder="Nome" required autofocus>
+                        <div class="input-group-text"><span class="bi bi-person"></span></div>
                     </div>
-                    <h2>Crie sua conta</h2>
-                    <p>Junte-se ao mundo do café e tecnologia.</p>
-                </header>
-
+                    <div class="input-group mb-3">
+                        <input type="text" name="lastName" class="form-control" placeholder="Sobrenome" required>
+                        <div class="input-group-text"><span class="bi bi-person"></span></div>
+                    </div>
+                    <div class="input-group mb-3">
+                        <input type="email" name="email" class="form-control" placeholder="E-mail" required>
+                        <div class="input-group-text"><span class="bi bi-envelope"></span></div>
+                    </div>
+                    <div class="input-group mb-3">
+                        <select name="role" class="form-select" required>
+                            <option value="" disabled selected>Selecione o tipo de registro</option>
+                            <option value="analista">Analista</option>
+                            <option value="administrador">Administrador</option>
+                            <option value="produtor">Produtor</option>
+                        </select>
+                        <div class="input-group-text"><span class="bi bi-person-badge"></span></div>
+                    </div>
+                    <div class="input-group mb-3">
+                        <input type="password" name="password" class="form-control" placeholder="Senha" required>
+                        <div class="input-group-text"><span class="bi bi-lock-fill"></span></div>
+                    </div>
+                    <div class="input-group mb-3">
+                        <input type="password" name="password_confirmation" class="form-control" placeholder="Confirme a senha" required>
+                        <div class="input-group-text"><span class="bi bi-lock-fill"></span></div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-8">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="terms" id="terms" required>
+                                <label class="form-check-label" for="terms">
+                                    Concordo com os <a href="#">termos</a>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <button type="submit" class="btn btn-primary w-100">Registrar</button>
+                        </div>
+                    </div>
+                </form>
                 @if ($errors->any())
                     <div class="alert alert-danger">
                         <ul class="mb-0">
@@ -33,46 +73,15 @@
                         </ul>
                     </div>
                 @endif
-
-                <form method="POST" action="{{ route('register') }}">
-                    @csrf
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <label for="firstName" class="form-label">Nome</label>
-                            <input type="text" class="form-control" id="firstName" name="firstName" value="{{ old('firstName') }}" required />
-                        </div>
-                        <div class="col-md-6">
-                            <label for="lastName" class="form-label">Sobrenome</label>
-                            <input type="text" class="form-control" id="lastName" name="lastName" value="{{ old('lastName') }}" required />
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <label for="email" class="form-label">Endereço de Email</label>
-                            <input type="email" class="form-control" id="email" name="email" value="{{ old('email') }}" required />
-                        </div>
-                        <div class="col-md-6">
-                            <label for="email_confirmation" class="form-label">Confirmação de Email</label>
-                            <input type="email" class="form-control" id="email_confirmation" name="email_confirmation" required />
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <label for="password" class="form-label">Senha</label>
-                            <input type="password" class="form-control" id="password" name="password" required />
-                        </div>
-                        <div class="col-md-6">
-                            <label for="password_confirmation" class="form-label">Confirmação de Senha</label>
-                            <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" required />
-                        </div>
-                    </div>
-                    <button type="submit" class="btn btn-primary w-100">Cadastrar</button>
-                    <nav class="mt-3 text-center">
-                        <a href="{{ url('/login') }}">Já tem uma conta? Faça seu login</a>
-                    </nav>
-                </form>
+                <div class="text-center mt-2">
+                    <a href="{{ route('login') }}">Já tenho uma conta</a>
+                </div>
             </div>
-        </section>
+        </div>
     </div>
-</main>
-@endsection
+    <footer class="text-center mt-4 text-muted">
+        <small>&copy; IFSULDEMINAS - Campus Machado | 2025</small>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

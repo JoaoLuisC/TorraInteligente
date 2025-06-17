@@ -18,10 +18,11 @@ class RegisterController extends Controller
 
     public function register(Request $request)
     {
-        $validator = Validator::make($request->all(), [
+       $validator = Validator::make($request->all(), [
             'firstName' => 'required|string|max:255',
             'lastName' => 'required|string|max:255',
-            'email' => 'required|email|confirmed|unique:users,email',
+            'email' => 'required|email|unique:usuarios,email',
+            'role' => 'required|in:analista,administrador,produtor',
             'password' => 'required|string|confirmed|min:8',
         ]);
 
@@ -30,13 +31,15 @@ class RegisterController extends Controller
         }
 
         $user = User::create([
-            'name' => $request->firstName . ' ' . $request->lastName,
+            'nome' => $request->firstName,
+            'sobrenome' => $request->lastName,
+            'tipo' => ucfirst($request->role),
             'email' => $request->email,
-            'password' => Hash::make($request->password),
+            'senha' => Hash::make($request->password),
         ]);
 
         Auth::login($user);
 
-        return redirect()->route('home')->with('success', 'Cadastro realizado com sucesso!');
+        return redirect()->route('torradores.index')->with('success', 'Cadastro realizado com sucesso!');
     }
 }
