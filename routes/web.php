@@ -23,4 +23,8 @@ Route::middleware('auth')->group(function () {
         Route::get('/adicionar-torrador', [TorradorController::class, 'create'])->name('torradores.adicionar-sensor');
         Route::post('/adicionar-torrador', [TorradorController::class, 'store'])->name('torradores.store');
     });
+
+    Route::get('/dashboard', function () { return view('usuarios.dashboard'); })->name('dashboard');
+
+
 });

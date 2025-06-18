@@ -6,7 +6,6 @@
     <title>@yield('title', 'Michelangelo')</title>
     <link rel="icon" href="{{ asset('images/graos-de-cafe.png') }}" type="image/x-icon">
     <link rel="stylesheet" href="{{ asset('css/index_style/index.css') }}">
-
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@4.0.0-beta3/dist/css/adminlte.min.css" crossorigin="anonymous"/>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/source-sans-3@5.0.12/index.css" integrity="sha256-tXJfXfp6Ewt1ilPzLDtQnJV4hclT9XuaZUKyUvmyr+Q=" crossorigin="anonymous" />
@@ -18,7 +17,6 @@
     @vite('resources/css/footer.css')
     @vite('resources/css/navbar.css')
     @stack('styles')
-
     <style>
         .hero-header {
             background-image: url('/images/header-bg.jpeg');
@@ -31,7 +29,6 @@
             align-items: center;
             justify-content: center;
         }
-
         .hero-header::before {
             content: '';
             position: absolute;
@@ -39,7 +36,6 @@
             background: rgba(0,0,0,0.45);
             z-index: 1;
         }
-
         .hero-content {
             position: relative;
             z-index: 2;
@@ -47,33 +43,63 @@
     </style>
 </head>
 <body>
-
+    <!-- Navbar -->
     <nav class="app-header navbar navbar-expand bg-body">
         <div class="container-fluid">
-            <!-- Logo à esquerda -->
             <a href="{{ url('/') }}" class="navbar-brand d-flex align-items-center">
                 <span class="ms-2 fw-bold">Michelangelo</span>
             </a>
-
-            <!-- Navbar Links à direita -->
             <ul class="navbar-nav ms-auto">
-                <li class="nav-item">
-                    <a href="{{ route('login') }}" class="nav-link">
-                        <i class="fas fa-sign-in-alt"></i> Login
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ route('register') }}" class="nav-link">
-                        <i class="fas fa-user-plus"></i> Registrar
-                    </a>
-                </li>
+                @guest
+                    <li class="nav-item">
+                        <a href="{{ route('login') }}" class="nav-link">
+                            <i class="fas fa-sign-in-alt"></i> Login
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('register') }}" class="nav-link">
+                            <i class="fas fa-user-plus"></i> Registrar
+                        </a>
+                    </li>
+                @else
+                    <li class="nav-item dropdown user-menu">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                            <span class="d-none d-md-inline">{{ Auth::user()->name }} {{ Auth::user()->sobrenome }}</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
+                            <li class="user-header text-bg-primary text-center">
+                                <img src="{{ asset('images/logoMichelangelo.png') }}" class="rounded-circle shadow mb-2"
+                                    alt="User" style="width: 80px; height: 80px;" />
+                                <p>
+                                    {{ Auth::user()->name }} {{ Auth::user()->sobrenome }}
+                                    <small>
+                                        Membro desde
+                                        @if(Auth::user()->created_at)
+                                            {{ Auth::user()->created_at->format('Y/m/d') }}
+                                        @else
+                                            Data não disponível
+                                        @endif
+                                    </small>
+                                </p>
+                            </li>
+                            <li class="user-footer d-flex justify-content-between">
+                                <a href="#" class="btn btn-default btn-flat">Perfil</a>
+                                <a href="{{ route('dashboard') }}" class="btn btn-default btn-flat">DashBoard</a>
+                                <form action="{{ route('logout') }}" method="POST" class="d-inline">
+                                    @csrf
+                                    <button type="submit" class="btn btn-default btn-flat">Sair</button>
+                                </form>
+                            </li>
+                        </ul>
+                    </li>
+                @endguest
             </ul>
         </div>
     </nav>
 
     @yield('MainContent')
 
-    <!--Footer-->
+    <!-- Footer -->
     <footer class="app-footer">
         <div class="float-end d-none d-sm-inline">Desenvolvido Por João Luís Cardoso</div>
         <strong> &copy; IFSULDEMINAS - Campus Machado | 2025&nbsp;</strong>
@@ -108,25 +134,20 @@
     <script>
         $(document).on('click', '.sidebar-wrapper a', function(e) {
             var href = $(this).attr('href');
-            // Só faz AJAX se for um link interno e diferente de '#'
             if (href && href !== '#' && !href.startsWith('http')) {
                 e.preventDefault();
-                // Carrega só o conteúdo principal da página de destino
                 $('main.app-main').load(href + ' main.app-main > *', function(response, status) {
                     if (status === "error") {
                         $('main.app-main').html('<div class="alert alert-danger">Erro ao carregar conteúdo.</div>');
                     }
                 });
-                // Atualiza a URL no navegador
                 window.history.pushState(null, '', href);
             }
         });
-        // Suporte ao botão voltar/avançar do navegador
         window.onpopstate = function() {
             var href = location.pathname;
             $('main.app-main').load(href + ' main.app-main > *');
         };
     </script>
-
 </body>
 </html>

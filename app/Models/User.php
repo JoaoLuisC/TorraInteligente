@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Carbon\Carbon;
 
 class User extends Authenticatable
 {
@@ -35,4 +36,17 @@ class User extends Authenticatable
     {
         return $this->senha;
     }
+
+    // Permite acessar 'name' como alias para 'nome'
+    public function getNameAttribute()
+    {
+        return $this->nome;
+    }
+
+    public function getCreatedAtAttribute()
+    {
+        $value = $this->attributes['criado_em'] ?? null;
+        return $value ? Carbon::parse($value) : null;
+    }
+
 }

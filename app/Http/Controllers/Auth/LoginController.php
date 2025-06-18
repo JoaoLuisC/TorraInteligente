@@ -24,9 +24,17 @@ class LoginController extends Controller
         ];
 
         if (Auth::attempt($credentials)) {
-            return redirect()->route('torradores.index')->with('success', 'Login realizado com sucesso!');
+            return redirect()->route('dashboard')->with('success', 'Login realizado com sucesso!');
         }
 
         return back()->withErrors(['email' => 'Credenciais inválidas'])->withInput();
+    }
+
+    public function logout(Request $request)
+    {
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        return redirect('/');
     }
 }
