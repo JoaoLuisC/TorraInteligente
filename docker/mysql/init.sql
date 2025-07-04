@@ -19,6 +19,50 @@
 CREATE DATABASE IF NOT EXISTS `michelangelo_bd` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci */;
 USE `michelangelo_bd`;
 
+-- Copiando estrutura para tabela michelangelo_bd.usuarios
+CREATE TABLE IF NOT EXISTS `usuarios` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nome` varchar(100) NOT NULL,
+  `sobrenome` varchar(100) NOT NULL,
+  `tipo` enum('Analista','Produtor','Administrador') NOT NULL,
+  `email` varchar(150) NOT NULL,
+  `senha` varchar(255) NOT NULL,
+  `criado_em` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `email` (`email`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- Copiando dados para a tabela michelangelo_bd.usuarios: ~3 rows (aproximadamente)
+INSERT INTO `usuarios` (`id`, `nome`, `sobrenome`, `tipo`, `email`, `senha`, `criado_em`) VALUES
+	(7, 'joao', 'cardoso', 'Administrador', 'carlos@gmail', '$2y$12$RRpMC9JaT7sxlFNDhSA5leNd7FQlIsrbWvo.B51eDnmm9AJdj1XLy', '2025-06-17 12:18:33'),
+	(8, 'joao', 'cardoso', 'Analista', 'dunthone2016@gmail.com', '$2y$12$G7ep4iMybO23V15SDG4//.xDLdKdZnwA1PzE/fvTFqXl0uJpeUIeG', '2025-06-17 12:27:26'),
+	(9, 'carlos', 'guedes', 'Analista', 'carlao@gmail.com', '$2y$12$tstUPTb2klBxjrpt1lKYF.lW2LwV86PonBdU7jvySbpFuyLrJYf8a', '2025-06-17 23:53:10');
+
+-- Copiando estrutura para tabela michelangelo_bd.qualidade_cafe
+CREATE TABLE IF NOT EXISTS `qualidade_cafe` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `variedade` enum('Arábico','Bourbon') NOT NULL,
+  `densidade` float NOT NULL,
+  `fermentacao` enum('Natural','Fermentado','CD') NOT NULL,
+  `finalidade` enum('Espresso','Filtro','Amostra') NOT NULL,
+  `criado_em` timestamp NOT NULL DEFAULT current_timestamp(),
+  `usuario_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_qualidade_usuario` (`usuario_id`),
+  CONSTRAINT `fk_qualidade_usuario` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- Copiando estrutura para tabela michelangelo_bd.torradores
+CREATE TABLE IF NOT EXISTS `torradores` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `usuario_id` int(11) NOT NULL,
+  `nome` varchar(100) NOT NULL,
+  `criado_em` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `fk_usuario` (`usuario_id`),
+  CONSTRAINT `fk_torradores_usuario` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 -- Copiando estrutura para tabela michelangelo_bd.analise_sensorial
 CREATE TABLE IF NOT EXISTS `analise_sensorial` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -43,37 +87,6 @@ CREATE TABLE IF NOT EXISTS `analise_sensorial` (
   CONSTRAINT `fk_analise_qualidade` FOREIGN KEY (`cafe_id`) REFERENCES `qualidade_cafe` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Copiando dados para a tabela michelangelo_bd.analise_sensorial: ~0 rows (aproximadamente)
-
--- Copiando estrutura para tabela michelangelo_bd.qualidade_cafe
-CREATE TABLE IF NOT EXISTS `qualidade_cafe` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `variedade` enum('Arábico','Bourbon') NOT NULL,
-  `densidade` float NOT NULL,
-  `fermentacao` enum('Natural','Fermentado','CD') NOT NULL,
-  `finalidade` enum('Espresso','Filtro','Amostra') NOT NULL,
-  `criado_em` timestamp NOT NULL DEFAULT current_timestamp(),
-  `usuario_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `fk_qualidade_usuario` (`usuario_id`),
-  CONSTRAINT `fk_qualidade_usuario` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- Copiando dados para a tabela michelangelo_bd.qualidade_cafe: ~0 rows (aproximadamente)
-
--- Copiando estrutura para tabela michelangelo_bd.torradores
-CREATE TABLE IF NOT EXISTS `torradores` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `usuario_id` int(11) NOT NULL,
-  `nome` varchar(100) NOT NULL,
-  `criado_em` timestamp NOT NULL DEFAULT current_timestamp(),
-  PRIMARY KEY (`id`),
-  KEY `fk_usuario` (`usuario_id`),
-  CONSTRAINT `fk_torradores_usuario` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- Copiando dados para a tabela michelangelo_bd.torradores: ~0 rows (aproximadamente)
-
 -- Copiando estrutura para tabela michelangelo_bd.torras
 CREATE TABLE IF NOT EXISTS `torras` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -88,26 +101,6 @@ CREATE TABLE IF NOT EXISTS `torras` (
   CONSTRAINT `fk_torras_usuario` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Copiando dados para a tabela michelangelo_bd.torras: ~0 rows (aproximadamente)
-
--- Copiando estrutura para tabela michelangelo_bd.usuarios
-CREATE TABLE IF NOT EXISTS `usuarios` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `nome` varchar(100) NOT NULL,
-  `sobrenome` varchar(100) NOT NULL,
-  `tipo` enum('Analista','Produtor','Administrador') NOT NULL,
-  `email` varchar(150) NOT NULL,
-  `senha` varchar(255) NOT NULL,
-  `criado_em` timestamp NOT NULL DEFAULT current_timestamp(),
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- Copiando dados para a tabela michelangelo_bd.usuarios: ~3 rows (aproximadamente)
-INSERT INTO `usuarios` (`id`, `nome`, `sobrenome`, `tipo`, `email`, `senha`, `criado_em`) VALUES
-	(7, 'joao', 'cardoso', 'Administrador', 'carlos@gmail', '$2y$12$RRpMC9JaT7sxlFNDhSA5leNd7FQlIsrbWvo.B51eDnmm9AJdj1XLy', '2025-06-17 12:18:33'),
-	(8, 'joao', 'cardoso', 'Analista', 'dunthone2016@gmail.com', '$2y$12$G7ep4iMybO23V15SDG4//.xDLdKdZnwA1PzE/fvTFqXl0uJpeUIeG', '2025-06-17 12:27:26'),
-	(9, 'carlos', 'guedes', 'Analista', 'carlao@gmail.com', '$2y$12$tstUPTb2klBxjrpt1lKYF.lW2LwV86PonBdU7jvySbpFuyLrJYf8a', '2025-06-17 23:53:10');
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
