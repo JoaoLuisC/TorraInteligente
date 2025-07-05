@@ -10,6 +10,7 @@ services:
       - ./:/var/www/html
     depends_on:
       - db
+      - node
     environment:
       - DB_HOST=db
       - DB_DATABASE=laravel
@@ -30,6 +31,13 @@ services:
     volumes:
       - dbdata:/var/lib/mysql
       - ./docker/mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  node:
+    image: node:20
+    working_dir: /var/www/html
+    volumes:
+    - .:/var/www/html
+    command: sh -c "npm install && npm run build"
 
 volumes:
   dbdata:
