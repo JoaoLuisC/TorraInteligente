@@ -10,16 +10,18 @@ RUN apt-get update && apt-get upgrade -y \
 # Habilita o mod_rewrite do Apache
 RUN a2enmod rewrite
 
-RUN composer install --no-interaction --prefer-dist --optimize-autoloader
-
-# Copia configuração personalizada do Apache (aponta DocumentRoot para /var/www/html/public)
-COPY ./apache/laravel.conf /etc/apache2/sites-available/000-default.conf
-
 # Instala o Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # Copia o projeto Laravel completo (não só o public/)
 COPY . /var/www/html
+
+# Instala as dependências do PHP
+WORKDIR /var/www/html
+RUN composer install --no-interaction --prefer-dist --optimize-autoloader
+
+# Copia configuração personalizada do Apache (aponta DocumentRoot para /var/www/html/public)
+COPY ./apache/laravel.conf /etc/apache2/sites-available/000-default.conf
 
 # Corrige permissões para o Laravel funcionar corretamente
 RUN chown -R www-data:www-data /var/www/html \
