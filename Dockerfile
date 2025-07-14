@@ -10,6 +10,8 @@ RUN apt-get update && apt-get upgrade -y \
 # Habilita o mod_rewrite do Apache
 RUN a2enmod rewrite
 
+RUN composer install --no-interaction --prefer-dist --optimize-autoloader
+
 # Copia configuração personalizada do Apache (aponta DocumentRoot para /var/www/html/public)
 COPY ./apache/laravel.conf /etc/apache2/sites-available/000-default.conf
 
