@@ -49,4 +49,8 @@ class User extends Authenticatable
         return $value ? Carbon::parse($value) : null;
     }
 
+    public function torradores()
+    {
+        return $this->hasMany(\App\Models\Torrador::class, 'usuario_id', 'id');
+    }
 }

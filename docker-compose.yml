@@ -13,7 +13,7 @@ services:
       - node
     environment:
       - DB_HOST=db
-      - DB_DATABASE=laravel
+      - DB_DATABASE=michelangelo_bd
       - DB_USERNAME=laravel
       - DB_PASSWORD=secret
 

@@ -10,6 +10,7 @@
         </div>
         <form id="formAdicionarTorrador" method="POST" action="{{ route('torradores.store') }}">
             @csrf
+            <div id="msg" class="alert d-none"></div>
             <div class="card-body">
                 <div class="row mb-3">
                     <label for="nome" class="col-sm-4 col-form-label">Nome do Torrador</label>

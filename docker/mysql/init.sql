@@ -38,25 +38,12 @@ INSERT INTO `usuarios` (`id`, `nome`, `sobrenome`, `tipo`, `email`, `senha`, `cr
 	(8, 'joao', 'cardoso', 'Analista', 'dunthone2016@gmail.com', '$2y$12$G7ep4iMybO23V15SDG4//.xDLdKdZnwA1PzE/fvTFqXl0uJpeUIeG', '2025-06-17 12:27:26'),
 	(9, 'carlos', 'guedes', 'Analista', 'carlao@gmail.com', '$2y$12$tstUPTb2klBxjrpt1lKYF.lW2LwV86PonBdU7jvySbpFuyLrJYf8a', '2025-06-17 23:53:10');
 
--- Copiando estrutura para tabela michelangelo_bd.qualidade_cafe
-CREATE TABLE IF NOT EXISTS `qualidade_cafe` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `variedade` enum('Arábico','Bourbon') NOT NULL,
-  `densidade` float NOT NULL,
-  `fermentacao` enum('Natural','Fermentado','CD') NOT NULL,
-  `finalidade` enum('Espresso','Filtro','Amostra') NOT NULL,
-  `criado_em` timestamp NOT NULL DEFAULT current_timestamp(),
-  `usuario_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `fk_qualidade_usuario` (`usuario_id`),
-  CONSTRAINT `fk_qualidade_usuario` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
 -- Copiando estrutura para tabela michelangelo_bd.torradores
 CREATE TABLE IF NOT EXISTS `torradores` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `usuario_id` int(11) NOT NULL,
   `nome` varchar(100) NOT NULL,
+  `codigo_conexao` varchar(100) NOT NULL,
   `criado_em` timestamp NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id`),
   KEY `fk_usuario` (`usuario_id`),
@@ -66,7 +53,7 @@ CREATE TABLE IF NOT EXISTS `torradores` (
 -- Copiando estrutura para tabela michelangelo_bd.analise_sensorial
 CREATE TABLE IF NOT EXISTS `analise_sensorial` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `cafe_id` int(11) NOT NULL,
+  `torra_id` int(11) NOT NULL,
   `aroma_po` decimal(3,1) DEFAULT NULL CHECK (`aroma_po` between 0 and 10),
   `fragrancia_cafe` decimal(3,1) DEFAULT NULL CHECK (`fragrancia_cafe` between 0 and 10),
   `aroma_final` decimal(3,1) GENERATED ALWAYS AS ((`aroma_po` + `fragrancia_cafe`) / 2) STORED,
@@ -82,25 +69,31 @@ CREATE TABLE IF NOT EXISTS `analise_sensorial` (
   `nota_total` decimal(5,2) GENERATED ALWAYS AS (`aroma_final` + `sabor` + `acidez` + `corpo` + `retro_gosto` + `equilibrio` + `docura` + `uniformidade` + `defeitos` + `balanceamento`) STORED,
   `criado_em` timestamp NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id`),
-  KEY `fk_analise_qualidade` (`cafe_id`),
-  CONSTRAINT `analise_sensorial_ibfk_1` FOREIGN KEY (`cafe_id`) REFERENCES `qualidade_cafe` (`id`),
-  CONSTRAINT `fk_analise_qualidade` FOREIGN KEY (`cafe_id`) REFERENCES `qualidade_cafe` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  KEY `fk_analise_torra` (`torra_id`),
+  CONSTRAINT `fk_analise_torra` FOREIGN KEY (`torra_id`) REFERENCES `torras` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Copiando estrutura para tabela michelangelo_bd.torras
 CREATE TABLE IF NOT EXISTS `torras` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `usuario_id` int(11) NOT NULL,
   `nome` varchar(100) NOT NULL,
-  `qualidade_cafe_id` int(11) NOT NULL,
+  -- Campos de qualidade do café incorporados
+  `variedade` enum('Arábico','Bourbon') NOT NULL,
+  `densidade` float NOT NULL,
+  `fermentacao` enum('Natural','Fermentado','CD') NOT NULL,
+  `finalidade` enum('Espresso','Filtro','Amostra') NOT NULL,
+  -- Campos de avaliação
+  `avaliada` BOOLEAN NOT NULL DEFAULT 0,
+  `avaliador_id` int(11) DEFAULT NULL,
+  `avaliada_em` timestamp NULL DEFAULT NULL,
   `criado_em` timestamp NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id`),
   KEY `fk_usuario` (`usuario_id`),
-  KEY `fk_qualidade` (`qualidade_cafe_id`),
-  CONSTRAINT `fk_torras_qualidade` FOREIGN KEY (`qualidade_cafe_id`) REFERENCES `qualidade_cafe` (`id`),
-  CONSTRAINT `fk_torras_usuario` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`)
+  KEY `fk_avaliador` (`avaliador_id`),
+  CONSTRAINT `fk_torras_usuario` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`),
+  CONSTRAINT `fk_torras_avaliador` FOREIGN KEY (`avaliador_id`) REFERENCES `usuarios` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

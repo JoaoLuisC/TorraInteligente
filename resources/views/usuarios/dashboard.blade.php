@@ -13,6 +13,112 @@
         </div>
     </div>
 
+    <!-- Avaliações de Torras -->
+    <div class="card mb-4 mt-5">
+        <div class="card-header border-0">
+            <h3 class="card-title">Avaliações de Torras</h3>
+            <div class="card-tools">
+                <a href="#" class="btn btn-tool btn-sm"> <i class="bi bi-download"></i> </a>
+                <a href="#" class="btn btn-tool btn-sm"> <i class="bi bi-list"></i> </a>
+            </div>
+        </div>
+        <div class="card-body table-responsive p-0">
+            <table class="table table-striped align-middle">
+                <thead>
+                    <tr>
+                        <th>Nome da Torra</th>
+                        <th>Grão do Café</th>
+                        <th>Nota do Café</th>
+                        <th>Mais</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <img
+                                src="../../../public/images/icons/3-graos-de-cafe.png"
+                                alt="Torra Média"
+                                class="rounded-circle img-size-32 me-2"
+                            />
+                            Torra Média
+                        </td>
+                        <td>Bourbon Amarelo</td>
+                        <td>
+                            <small class="text-success me-1">
+                                <i class="bi bi-arrow-up"></i>
+                                8.7
+                            </small>
+                        </td>
+                        <td>
+                            <a href="#" class="text-secondary"> <i class="bi bi-search"></i> </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <img
+                                src="../../"
+                                alt="Torra Clara"
+                                class="rounded-circle img-size-32 me-2"
+                            />
+                            Torra Clara
+                        </td>
+                        <td>Catuaí Vermelho</td>
+                        <td>
+                            <small class="text-info me-1">
+                                <i class="bi bi-arrow-down"></i>
+                                7.9
+                            </small>
+                        </td>
+                        <td>
+                            <a href="#" class="text-secondary"> <i class="bi bi-search"></i> </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <img
+                                src="../../"
+                                alt="Torra Escura"
+                                class="rounded-circle img-size-32 me-2"
+                            />
+                            Torra Escura
+                        </td>
+                        <td>Mundo Novo</td>
+                        <td>
+                            <small class="text-danger me-1">
+                                <i class="bi bi-arrow-down"></i>
+                                6.5
+                            </small>
+                        </td>
+                        <td>
+                            <a href="#" class="text-secondary"> <i class="bi bi-search"></i> </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <img
+                                src="../../"
+                                alt="Torra Especial"
+                                class="rounded-circle img-size-32 me-2"
+                            />
+                            Torra Especial
+                            <span class="badge text-bg-danger">NOVA</span>
+                        </td>
+                        <td>Arara</td>
+                        <td>
+                            <small class="text-success me-1">
+                                <i class="bi bi-arrow-up"></i>
+                                9.2
+                            </small>
+                        </td>
+                        <td>
+                            <a href="#" class="text-secondary"> <i class="bi bi-search"></i> </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
     <!-- Últimas Torras -->
     <div class="row mt-4">
         <div class="col-12">
