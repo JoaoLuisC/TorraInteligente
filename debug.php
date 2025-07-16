@@ -26,14 +26,29 @@ try {
 
     // Verificar banco de dados
     echo "4. Testando conexão com banco...\n";
-    $pdo = new PDO($_ENV['DATABASE_URL']);
-    echo "✅ Conexão com banco OK\n";
 
-    // Verificar se consegue fazer uma query simples
-    echo "5. Testando query no banco...\n";
-    $stmt = $pdo->query("SELECT 1 as test");
-    $result = $stmt->fetch();
-    echo "✅ Query OK: " . $result['test'] . "\n";
+    // Verificar se extensões PostgreSQL estão carregadas
+    echo "PostgreSQL extension loaded: " . (extension_loaded('pgsql') ? 'YES' : 'NO') . "\n";
+    echo "PDO PostgreSQL extension loaded: " . (extension_loaded('pdo_pgsql') ? 'YES' : 'NO') . "\n";
+
+    if (extension_loaded('pdo_pgsql')) {
+        echo "✅ Driver PostgreSQL encontrado\n";
+
+        // Usar Laravel DB ao invés de PDO direto
+        try {
+            $pdo = DB::connection()->getPdo();
+            echo "✅ Conexão com banco OK\n";
+
+            // Verificar se consegue fazer uma query simples
+            echo "5. Testando query no banco...\n";
+            $result = DB::select('SELECT 1 as test');
+            echo "✅ Query OK: " . $result[0]->test . "\n";
+        } catch (Exception $dbError) {
+            echo "❌ ERRO de banco: " . $dbError->getMessage() . "\n";
+        }
+    } else {
+        echo "❌ Driver PostgreSQL NÃO encontrado\n";
+    }
 
     // Verificar cache e storage
     echo "6. Verificando diretórios...\n";

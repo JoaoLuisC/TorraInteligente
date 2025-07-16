@@ -2,8 +2,9 @@ FROM php:8.2.20-apache
 
 # Atualize os pacotes do sistema para corrigir vulnerabilidades
 RUN apt-get update && apt-get upgrade -y \
-    && apt-get install -y libzip-dev unzip zip git curl libpq-dev \
-    && docker-php-ext-install pdo pdo_pgsql zip \
+    && apt-get install -y libzip-dev unzip zip git curl libpq-dev postgresql-client \
+    && docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
+    && docker-php-ext-install pdo pdo_pgsql pgsql zip \
     && apt-get autoremove -y && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
