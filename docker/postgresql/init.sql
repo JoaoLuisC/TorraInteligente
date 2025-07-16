@@ -62,7 +62,7 @@ CREATE TABLE IF NOT EXISTS analise_sensorial (
     defeitos DECIMAL(3,1) CHECK (defeitos BETWEEN 0 AND 10),
     balanceamento DECIMAL(3,1) CHECK (balanceamento BETWEEN 0 AND 10),
     nota_total DECIMAL(5,2) GENERATED ALWAYS AS (
-        aroma_final + sabor + acidez + corpo + retro_gosto +
+        ((aroma_po + fragrancia_cafe) / 2) + sabor + acidez + corpo + retro_gosto +
         equilibrio + docura + uniformidade + defeitos + balanceamento
     ) STORED,
     criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
