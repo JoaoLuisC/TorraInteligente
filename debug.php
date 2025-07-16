@@ -71,4 +71,20 @@ echo "APP_ENV: " . ($_ENV['APP_ENV'] ?? 'não definido') . "\n";
 echo "APP_KEY: " . (isset($_ENV['APP_KEY']) ? 'definido' : 'NÃO DEFINIDO') . "\n";
 echo "DB_CONNECTION: " . ($_ENV['DB_CONNECTION'] ?? 'não definido') . "\n";
 echo "DATABASE_URL: " . (isset($_ENV['DATABASE_URL']) ? 'definido' : 'NÃO DEFINIDO') . "\n";
+echo "DB_HOST: " . ($_ENV['DB_HOST'] ?? 'não definido') . "\n";
+echo "DB_PORT: " . ($_ENV['DB_PORT'] ?? 'não definido') . "\n";
+echo "DB_DATABASE: " . ($_ENV['DB_DATABASE'] ?? 'não definido') . "\n";
+echo "DB_USERNAME: " . ($_ENV['DB_USERNAME'] ?? 'não definido') . "\n";
+
+echo "\n=== CONFIGURAÇÃO ATUAL DO BANCO ===\n";
+try {
+    $dbConfig = config('database.connections.pgsql');
+    echo "Host configurado: " . $dbConfig['host'] . "\n";
+    echo "Port configurado: " . $dbConfig['port'] . "\n";
+    echo "Database configurado: " . $dbConfig['database'] . "\n";
+    echo "Username configurado: " . $dbConfig['username'] . "\n";
+    echo "URL configurado: " . ($dbConfig['url'] ?? 'não definido') . "\n";
+} catch (Exception $e) {
+    echo "❌ Erro ao ler configuração: " . $e->getMessage() . "\n";
+}
 ?>
