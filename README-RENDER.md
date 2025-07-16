@@ -25,7 +25,7 @@ Certifique-se de que os seguintes arquivos estão no repositório:
 3. Configure:
    - **Name**: `torra-inteligente-db`
    - **Database Name**: `michelangelo_bd`
-   - **User**: `postgres`
+   - **User**: `joaoluis`
    - **Region**: Escolha a mesma região do web service
 4. Clique em "Create Database"
 
