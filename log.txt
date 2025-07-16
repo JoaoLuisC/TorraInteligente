@@ -1,0 +1,415 @@
+2025-07-16T21:53:34.758799811Z ==> Cloning from https://github.com/JoaoLuisC/TorraInteligente
+2025-07-16T21:53:45.826660956Z ==> Checking out commit a6ccd50a3ca02253f92ca9bd8b723f573676556d in branch main
+2025-07-16T21:53:47.64290913Z ==> Downloading cache...
+2025-07-16T21:53:59.359077752Z ==> Transferred 524MB in 9s. Extraction took 1s.
+2025-07-16T21:54:23.924946663Z #1 [internal] load build definition from Dockerfile
+2025-07-16T21:54:23.924971155Z #1 transferring dockerfile: 1.13kB done
+2025-07-16T21:54:23.924973765Z #1 DONE 0.1s
+2025-07-16T21:54:23.924975495Z
+2025-07-16T21:54:23.924977675Z #2 [internal] load metadata for docker.io/library/php:8.2.20-apache
+2025-07-16T21:54:24.188924669Z #2 ...
+2025-07-16T21:54:24.18893878Z
+2025-07-16T21:54:24.18894231Z #3 [auth] library/composer:pull render-prod/docker-mirror-repository/library/composer:pull token for us-west1-docker.pkg.dev
+2025-07-16T21:54:24.18894684Z #3 DONE 0.0s
+2025-07-16T21:54:24.188949481Z
+2025-07-16T21:54:24.18895225Z #4 [auth] library/php:pull render-prod/docker-mirror-repository/library/php:pull token for us-west1-docker.pkg.dev
+2025-07-16T21:54:24.188955331Z #4 DONE 0.0s
+2025-07-16T21:54:24.340404298Z
+2025-07-16T21:54:24.340428369Z #5 [internal] load metadata for docker.io/library/composer:latest
+2025-07-16T21:54:24.641262539Z #5 DONE 0.7s
+2025-07-16T21:54:24.64128191Z
+2025-07-16T21:54:24.64128743Z #2 [internal] load metadata for docker.io/library/php:8.2.20-apache
+2025-07-16T21:54:25.392450978Z #2 DONE 1.4s
+2025-07-16T21:54:25.392471189Z
+2025-07-16T21:54:25.392477359Z #6 [internal] load .dockerignore
+2025-07-16T21:54:25.39248293Z #6 transferring context: 70B done
+2025-07-16T21:54:25.39249102Z #6 DONE 0.0s
+2025-07-16T21:54:25.392494991Z
+2025-07-16T21:54:25.392499991Z #7 importing cache manifest from local:684548035174290282
+2025-07-16T21:54:25.392504851Z #7 inferred cache manifest type: application/vnd.oci.image.index.v1+json done
+2025-07-16T21:54:25.392508721Z #7 DONE 0.0s
+2025-07-16T21:54:25.392512552Z
+2025-07-16T21:54:25.392517302Z #8 FROM docker.io/library/composer:latest@sha256:a91ae6a2f823903231e7f1aa4617ecb3c27658c280efaa47bb5d2819b8e7dba7
+2025-07-16T21:54:25.392521282Z #8 resolve docker.io/library/composer:latest@sha256:a91ae6a2f823903231e7f1aa4617ecb3c27658c280efaa47bb5d2819b8e7dba7 0.0s done
+2025-07-16T21:54:25.392525062Z #8 DONE 0.0s
+2025-07-16T21:54:25.392528893Z
+2025-07-16T21:54:25.392533453Z #9 [stage-0 1/9] FROM docker.io/library/php:8.2.20-apache@sha256:4c38281b88ffe0ee15f12ee9670520084e40635bf4887b854bfd503bad2e30af
+2025-07-16T21:54:25.392537363Z #9 resolve docker.io/library/php:8.2.20-apache@sha256:4c38281b88ffe0ee15f12ee9670520084e40635bf4887b854bfd503bad2e30af 0.0s done
+2025-07-16T21:54:25.392541203Z #9 DONE 0.0s
+2025-07-16T21:54:25.392545124Z
+2025-07-16T21:54:25.392549084Z #10 [internal] load build context
+2025-07-16T21:54:25.542800248Z #10 transferring context: 6.71MB 0.1s done
+2025-07-16T21:54:25.543004821Z #10 DONE 0.1s
+2025-07-16T21:54:25.543016632Z
+2025-07-16T21:54:25.543022952Z #11 [stage-0 2/9] RUN apt-get update && apt-get upgrade -y     && apt-get install -y libzip-dev unzip zip git curl libpq-dev     && docker-php-ext-install pdo pdo_pgsql zip     && apt-get autoremove -y && apt-get clean     && rm -rf /var/lib/apt/lists/*
+2025-07-16T21:54:25.543029082Z #11 CACHED
+2025-07-16T21:54:25.543032842Z
+2025-07-16T21:54:25.543037583Z #12 [stage-0 3/9] RUN a2enmod rewrite
+2025-07-16T21:54:25.543041423Z #12 CACHED
+2025-07-16T21:54:25.543045293Z
+2025-07-16T21:54:25.543050314Z #13 [stage-0 4/9] COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+2025-07-16T21:54:25.692903814Z #13 sha256:f11c1adaa26e078479ccdd45312ea3b88476441b91be0ec898a7e07bfd05badc 14.47MB / 29.13MB 0.2s
+2025-07-16T21:54:25.843863322Z #13 sha256:f11c1adaa26e078479ccdd45312ea3b88476441b91be0ec898a7e07bfd05badc 29.13MB / 29.13MB 0.3s
+2025-07-16T21:54:26.295264755Z #13 sha256:f11c1adaa26e078479ccdd45312ea3b88476441b91be0ec898a7e07bfd05badc 29.13MB / 29.13MB 0.7s done
+2025-07-16T21:54:26.445950936Z #13 extracting sha256:f11c1adaa26e078479ccdd45312ea3b88476441b91be0ec898a7e07bfd05badc
+2025-07-16T21:54:28.09876983Z #13 extracting sha256:f11c1adaa26e078479ccdd45312ea3b88476441b91be0ec898a7e07bfd05badc 1.7s done
+2025-07-16T21:54:29.298863171Z #13 sha256:91c1fd48de30b16f5766e6ac96a6fe3c0b3241c34c93fe82ddc8a8536729dd53 226B / 226B 0.1s done
+2025-07-16T21:54:29.75020363Z #13 extracting sha256:91c1fd48de30b16f5766e6ac96a6fe3c0b3241c34c93fe82ddc8a8536729dd53
+2025-07-16T21:54:32.140107912Z #13 extracting sha256:91c1fd48de30b16f5766e6ac96a6fe3c0b3241c34c93fe82ddc8a8536729dd53 2.5s done
+2025-07-16T21:54:32.441650613Z #13 sha256:c3b3bda7c6d1ae6620633030596609872e7f2b102e3f274f02c71ee92e136cb7 17.83MB / 104.35MB 0.2s
+2025-07-16T21:54:32.591919649Z #13 sha256:c3b3bda7c6d1ae6620633030596609872e7f2b102e3f274f02c71ee92e136cb7 35.65MB / 104.35MB 0.3s
+2025-07-16T21:54:32.742029255Z #13 sha256:c3b3bda7c6d1ae6620633030596609872e7f2b102e3f274f02c71ee92e136cb7 52.43MB / 104.35MB 0.5s
+2025-07-16T21:54:32.892343414Z #13 sha256:c3b3bda7c6d1ae6620633030596609872e7f2b102e3f274f02c71ee92e136cb7 71.30MB / 104.35MB 0.6s
+2025-07-16T21:54:33.042916718Z #13 sha256:c3b3bda7c6d1ae6620633030596609872e7f2b102e3f274f02c71ee92e136cb7 89.13MB / 104.35MB 0.8s
+2025-07-16T21:54:33.193579727Z #13 sha256:c3b3bda7c6d1ae6620633030596609872e7f2b102e3f274f02c71ee92e136cb7 104.35MB / 104.35MB 0.9s
+2025-07-16T21:54:33.947534832Z #13 sha256:c3b3bda7c6d1ae6620633030596609872e7f2b102e3f274f02c71ee92e136cb7 104.35MB / 104.35MB 1.6s done
+2025-07-16T21:54:34.077518584Z #13 extracting sha256:c3b3bda7c6d1ae6620633030596609872e7f2b102e3f274f02c71ee92e136cb7
+2025-07-16T21:54:44.292321277Z #13 extracting sha256:c3b3bda7c6d1ae6620633030596609872e7f2b102e3f274f02c71ee92e136cb7 10.2s done
+2025-07-16T21:54:44.442763383Z #13 sha256:65a68eb681dd3cc5f145cf854bf049843298d6ee06c3259ddff5bf4793710a80 225B / 225B done
+2025-07-16T21:54:44.442786655Z #13 extracting sha256:65a68eb681dd3cc5f145cf854bf049843298d6ee06c3259ddff5bf4793710a80
+2025-07-16T21:54:44.735007044Z #13 extracting sha256:65a68eb681dd3cc5f145cf854bf049843298d6ee06c3259ddff5bf4793710a80 0.4s done
+2025-07-16T21:54:45.036541464Z #13 sha256:35406f9afc7f771a49890b78aa21515eb9a55078c04c935db2eccebfa0ee09e1 20.33MB / 20.33MB 0.2s done
+2025-07-16T21:54:45.036564316Z #13 extracting sha256:35406f9afc7f771a49890b78aa21515eb9a55078c04c935db2eccebfa0ee09e1
+2025-07-16T21:54:45.602830907Z #13 extracting sha256:35406f9afc7f771a49890b78aa21515eb9a55078c04c935db2eccebfa0ee09e1 0.6s done
+2025-07-16T21:54:45.602850109Z #13 sha256:a7d29e3575095485f641778e00db76200a84450e66c56ade92952177c80038fd 436B / 436B done
+2025-07-16T21:54:45.602855239Z #13 extracting sha256:a7d29e3575095485f641778e00db76200a84450e66c56ade92952177c80038fd 0.0s done
+2025-07-16T21:54:45.602859809Z #13 sha256:d497b137ced83d700feeac177251b0552c63749019adf459aeb89db255825ee2 487B / 487B done
+2025-07-16T21:54:45.60286472Z #13 extracting sha256:d497b137ced83d700feeac177251b0552c63749019adf459aeb89db255825ee2 0.0s done
+2025-07-16T21:54:45.90439407Z #13 sha256:199c1373b38a486cf06c37a0d40388436572e26ce5011a494be446265df566a3 12.43MB / 12.43MB 0.2s done
+2025-07-16T21:54:45.904414991Z #13 extracting sha256:199c1373b38a486cf06c37a0d40388436572e26ce5011a494be446265df566a3
+2025-07-16T21:54:46.204563779Z #13 extracting sha256:199c1373b38a486cf06c37a0d40388436572e26ce5011a494be446265df566a3 0.3s done
+2025-07-16T21:54:46.20458952Z #13 sha256:a087c2a4e19b42decfed96403909b5c3170ff746190eefc41ef9b8e65322fee7 490B / 490B done
+2025-07-16T21:54:46.20459433Z #13 extracting sha256:a087c2a4e19b42decfed96403909b5c3170ff746190eefc41ef9b8e65322fee7 0.0s done
+2025-07-16T21:54:46.355494164Z #13 sha256:646a76836d788373977cb6e165941b84336ffbd2fc71d7758ca54b9ceb463f10 11.40MB / 11.40MB 0.1s done
+2025-07-16T21:54:46.355519855Z #13 extracting sha256:646a76836d788373977cb6e165941b84336ffbd2fc71d7758ca54b9ceb463f10
+2025-07-16T21:54:46.91238944Z #13 extracting sha256:646a76836d788373977cb6e165941b84336ffbd2fc71d7758ca54b9ceb463f10 0.7s done
+2025-07-16T21:54:47.062792943Z #13 sha256:de207cf6ae353ab7df867583973042be7a2155f857406fea28924d3303a26965 2.46kB / 2.46kB done
+2025-07-16T21:54:47.062817845Z #13 extracting sha256:de207cf6ae353ab7df867583973042be7a2155f857406fea28924d3303a26965
+2025-07-16T21:54:47.476379364Z #13 extracting sha256:de207cf6ae353ab7df867583973042be7a2155f857406fea28924d3303a26965 0.6s done
+2025-07-16T21:54:47.626749965Z #13 sha256:2e491b77be4cc5e30bd91c3e27dbc90080ab0a404719f77def3d6282a749757d 246B / 246B done
+2025-07-16T21:54:47.626773537Z #13 extracting sha256:2e491b77be4cc5e30bd91c3e27dbc90080ab0a404719f77def3d6282a749757d
+2025-07-16T21:54:59.759725998Z #13 extracting sha256:2e491b77be4cc5e30bd91c3e27dbc90080ab0a404719f77def3d6282a749757d 12.2s done
+2025-07-16T21:54:59.759747429Z #13 sha256:67f7afba5a8e6476e2ebab8a7e8a9f764b6da87b5e83fafd6a52f7f979f5a26e 892B / 892B done
+2025-07-16T21:54:59.909816092Z #13 extracting sha256:67f7afba5a8e6476e2ebab8a7e8a9f764b6da87b5e83fafd6a52f7f979f5a26e 0.0s done
+2025-07-16T21:55:00.07670917Z #13 sha256:2c231c3bdfc9d49fa39493b62d4de68bcd88f90da94cd8eb540e325436c092eb 18.87MB / 151.72MB 0.2s
+2025-07-16T21:55:00.226804265Z #13 sha256:2c231c3bdfc9d49fa39493b62d4de68bcd88f90da94cd8eb540e325436c092eb 37.75MB / 151.72MB 0.3s
+2025-07-16T21:55:00.376989045Z #13 sha256:2c231c3bdfc9d49fa39493b62d4de68bcd88f90da94cd8eb540e325436c092eb 54.53MB / 151.72MB 0.5s
+2025-07-16T21:55:00.527305553Z #13 sha256:2c231c3bdfc9d49fa39493b62d4de68bcd88f90da94cd8eb540e325436c092eb 74.45MB / 151.72MB 0.6s
+2025-07-16T21:55:00.677535396Z #13 sha256:2c231c3bdfc9d49fa39493b62d4de68bcd88f90da94cd8eb540e325436c092eb 90.18MB / 151.72MB 0.8s
+2025-07-16T21:55:00.827540425Z #13 sha256:2c231c3bdfc9d49fa39493b62d4de68bcd88f90da94cd8eb540e325436c092eb 109.05MB / 151.72MB 0.9s
+2025-07-16T21:55:00.977542694Z #13 sha256:2c231c3bdfc9d49fa39493b62d4de68bcd88f90da94cd8eb540e325436c092eb 125.83MB / 151.72MB 1.1s
+2025-07-16T21:55:01.127840691Z #13 sha256:2c231c3bdfc9d49fa39493b62d4de68bcd88f90da94cd8eb540e325436c092eb 144.70MB / 151.72MB 1.2s
+2025-07-16T21:55:01.429644327Z #13 sha256:2c231c3bdfc9d49fa39493b62d4de68bcd88f90da94cd8eb540e325436c092eb 151.72MB / 151.72MB 1.5s done
+2025-07-16T21:55:01.429666159Z #13 extracting sha256:2c231c3bdfc9d49fa39493b62d4de68bcd88f90da94cd8eb540e325436c092eb
+2025-07-16T21:55:11.043337006Z #13 extracting sha256:2c231c3bdfc9d49fa39493b62d4de68bcd88f90da94cd8eb540e325436c092eb 9.6s done
+2025-07-16T21:55:11.043360427Z #13 sha256:e50ec380c37f6f2fa46ddd8483da4970bcdcddfdf921770f565f315fb5e12df3 313B / 313B done
+2025-07-16T21:55:11.043365477Z #13 extracting sha256:e50ec380c37f6f2fa46ddd8483da4970bcdcddfdf921770f565f315fb5e12df3 0.1s done
+2025-07-16T21:55:11.193852395Z #13 sha256:d350be82efdfd8413a20cba45ad24bf5263bd4f13fc9aa307c6bd7ba56bf371a 748.70kB / 748.70kB 0.0s done
+2025-07-16T21:55:11.193876107Z #13 extracting sha256:d350be82efdfd8413a20cba45ad24bf5263bd4f13fc9aa307c6bd7ba56bf371a
+2025-07-16T21:55:11.746203876Z #13 extracting sha256:d350be82efdfd8413a20cba45ad24bf5263bd4f13fc9aa307c6bd7ba56bf371a 0.6s done
+2025-07-16T21:55:11.746234028Z #13 CACHED
+2025-07-16T21:55:11.896721275Z
+2025-07-16T21:55:11.896755677Z #14 [stage-0 5/9] COPY . /var/www/html
+2025-07-16T21:55:12.031853787Z #14 DONE 0.2s
+2025-07-16T21:55:12.031877609Z
+2025-07-16T21:55:12.031884289Z #15 [stage-0 6/9] WORKDIR /var/www/html
+2025-07-16T21:55:12.031888759Z #15 DONE 0.1s
+2025-07-16T21:55:12.141091357Z
+2025-07-16T21:55:12.141118739Z #16 [stage-0 7/9] RUN composer install --no-interaction --prefer-dist --optimize-autoloader
+2025-07-16T21:55:12.14113515Z #16 0.108 Composer plugins have been disabled for safety in this non-interactive session.
+2025-07-16T21:55:12.14113801Z #16 0.108 Set COMPOSER_ALLOW_SUPERUSER=1 if you want to allow plugins to run as root/super user.
+2025-07-16T21:55:12.14114063Z #16 0.108 Do not run Composer as root/super user! See https://getcomposer.org/root for details
+2025-07-16T21:55:12.241245079Z #16 0.170 Installing dependencies from lock file (including require-dev)
+2025-07-16T21:55:12.24126539Z #16 0.174 Verifying lock file contents can be installed on current platform.
+2025-07-16T21:55:12.24126866Z #16 0.193 Package operations: 110 installs, 0 updates, 0 removals
+2025-07-16T21:55:12.241272791Z #16 0.199   - Downloading doctrine/inflector (2.0.10)
+2025-07-16T21:55:12.241276291Z #16 0.200   - Downloading doctrine/lexer (3.0.1)
+2025-07-16T21:55:12.241279121Z #16 0.201   - Downloading symfony/polyfill-ctype (v1.32.0)
+2025-07-16T21:55:12.241282021Z #16 0.201   - Downloading webmozart/assert (1.11.0)
+2025-07-16T21:55:12.241284791Z #16 0.201   - Downloading dragonmantank/cron-expression (v3.4.0)
+2025-07-16T21:55:12.241287221Z #16 0.202   - Downloading symfony/deprecation-contracts (v3.6.0)
+2025-07-16T21:55:12.241289872Z #16 0.202   - Downloading psr/container (2.0.2)
+2025-07-16T21:55:12.241292362Z #16 0.202   - Downloading fakerphp/faker (v1.24.1)
+2025-07-16T21:55:12.241294682Z #16 0.203   - Downloading symfony/polyfill-php83 (v1.32.0)
+2025-07-16T21:55:12.241297162Z #16 0.203   - Downloading symfony/polyfill-mbstring (v1.32.0)
+2025-07-16T21:55:12.241299852Z #16 0.203   - Downloading symfony/http-foundation (v7.2.6)
+2025-07-16T21:55:12.241302752Z #16 0.204   - Downloading fruitcake/php-cors (v1.3.0)
+2025-07-16T21:55:12.241305422Z #16 0.204   - Downloading psr/http-message (2.0)
+2025-07-16T21:55:12.241308123Z #16 0.204   - Downloading psr/http-client (1.0.3)
+2025-07-16T21:55:12.241310653Z #16 0.204   - Downloading ralouphie/getallheaders (3.0.3)
+2025-07-16T21:55:12.241317263Z #16 0.205   - Downloading psr/http-factory (1.1.0)
+2025-07-16T21:55:12.241320123Z #16 0.205   - Downloading guzzlehttp/psr7 (2.7.1)
+2025-07-16T21:55:12.241322783Z #16 0.205   - Downloading guzzlehttp/promises (2.2.0)
+2025-07-16T21:55:12.241325324Z #16 0.205   - Downloading guzzlehttp/guzzle (7.9.3)
+2025-07-16T21:55:12.241327864Z #16 0.205   - Downloading symfony/polyfill-php80 (v1.32.0)
+2025-07-16T21:55:12.241330074Z #16 0.206   - Downloading guzzlehttp/uri-template (v1.0.4)
+2025-07-16T21:55:12.241332634Z #16 0.206   - Downloading symfony/polyfill-intl-normalizer (v1.32.0)
+2025-07-16T21:55:12.241346755Z #16 0.206   - Downloading symfony/polyfill-intl-grapheme (v1.32.0)
+2025-07-16T21:55:12.241350155Z #16 0.206   - Downloading symfony/string (v7.2.6)
+2025-07-16T21:55:12.241352715Z #16 0.206   - Downloading symfony/service-contracts (v3.6.0)
+2025-07-16T21:55:12.241355565Z #16 0.207   - Downloading symfony/console (v7.2.6)
+2025-07-16T21:55:12.241358696Z #16 0.207   - Downloading nunomaduro/termwind (v2.3.1)
+2025-07-16T21:55:12.241361416Z #16 0.207   - Downloading voku/portable-ascii (2.0.3)
+2025-07-16T21:55:12.241363986Z #16 0.207   - Downloading phpoption/phpoption (1.9.3)
+2025-07-16T21:55:12.241366566Z #16 0.208   - Downloading graham-campbell/result-type (v1.1.3)
+2025-07-16T21:55:12.241368876Z #16 0.208   - Downloading vlucas/phpdotenv (v5.6.2)
+2025-07-16T21:55:12.241371237Z #16 0.208   - Downloading symfony/css-selector (v7.2.0)
+2025-07-16T21:55:12.241374097Z #16 0.208   - Downloading tijsverkoyen/css-to-inline-styles (v2.3.0)
+2025-07-16T21:55:12.241376697Z #16 0.208   - Downloading symfony/var-dumper (v7.2.6)
+2025-07-16T21:55:12.39211183Z #16 0.209   - Downloading symfony/polyfill-uuid (v1.32.0)
+2025-07-16T21:55:12.392145941Z #16 0.209   - Downloading symfony/uid (v7.2.0)
+2025-07-16T21:55:12.392148962Z #16 0.209   - Downloading symfony/routing (v7.2.3)
+2025-07-16T21:55:12.392151192Z #16 0.209   - Downloading symfony/process (v7.2.5)
+2025-07-16T21:55:12.392153252Z #16 0.209   - Downloading symfony/polyfill-intl-idn (v1.32.0)
+2025-07-16T21:55:12.392155322Z #16 0.210   - Downloading symfony/mime (v7.2.6)
+2025-07-16T21:55:12.392157832Z #16 0.210   - Downloading psr/event-dispatcher (1.0.0)
+2025-07-16T21:55:12.392160662Z #16 0.210   - Downloading symfony/event-dispatcher-contracts (v3.6.0)
+2025-07-16T21:55:12.392162733Z #16 0.210   - Downloading symfony/event-dispatcher (v7.2.0)
+2025-07-16T21:55:12.392164833Z #16 0.210   - Downloading psr/log (3.0.2)
+2025-07-16T21:55:12.392167363Z #16 0.211   - Downloading egulias/email-validator (4.0.4)
+2025-07-16T21:55:12.392169433Z #16 0.211   - Downloading symfony/mailer (v7.2.6)
+2025-07-16T21:55:12.392171443Z #16 0.211   - Downloading symfony/error-handler (v7.2.5)
+2025-07-16T21:55:12.392197505Z #16 0.211   - Downloading symfony/http-kernel (v7.2.6)
+2025-07-16T21:55:12.392206745Z #16 0.211   - Downloading symfony/finder (v7.2.2)
+2025-07-16T21:55:12.392210036Z #16 0.212   - Downloading ramsey/collection (2.1.1)
+2025-07-16T21:55:12.392213596Z #16 0.212   - Downloading brick/math (0.12.3)
+2025-07-16T21:55:12.392217276Z #16 0.212   - Downloading ramsey/uuid (4.7.6)
+2025-07-16T21:55:12.392220696Z #16 0.212   - Downloading psr/simple-cache (3.0.0)
+2025-07-16T21:55:12.392224506Z #16 0.212   - Downloading symfony/translation-contracts (v3.6.0)
+2025-07-16T21:55:12.392227366Z #16 0.213   - Downloading symfony/translation (v7.2.6)
+2025-07-16T21:55:12.392229417Z #16 0.213   - Downloading psr/clock (1.0.0)
+2025-07-16T21:55:12.392231577Z #16 0.213   - Downloading symfony/clock (v7.2.0)
+2025-07-16T21:55:12.392233697Z #16 0.213   - Downloading carbonphp/carbon-doctrine-types (3.2.0)
+2025-07-16T21:55:12.392235737Z #16 0.213   - Downloading nesbot/carbon (3.9.1)
+2025-07-16T21:55:12.392237787Z #16 0.214   - Downloading monolog/monolog (3.9.0)
+2025-07-16T21:55:12.392239827Z #16 0.214   - Downloading league/uri-interfaces (7.5.0)
+2025-07-16T21:55:12.392241817Z #16 0.214   - Downloading league/uri (7.5.1)
+2025-07-16T21:55:12.392244018Z #16 0.214   - Downloading league/mime-type-detection (1.16.0)
+2025-07-16T21:55:12.392246108Z #16 0.215   - Downloading league/flysystem-local (3.29.0)
+2025-07-16T21:55:12.392248188Z #16 0.215   - Downloading league/flysystem (3.29.1)
+2025-07-16T21:55:12.392250218Z #16 0.215   - Downloading nette/utils (v4.0.6)
+2025-07-16T21:55:12.392252208Z #16 0.215   - Downloading nette/schema (v1.3.2)
+2025-07-16T21:55:12.392254208Z #16 0.216   - Downloading dflydev/dot-access-data (v3.0.3)
+2025-07-16T21:55:12.392256208Z #16 0.216   - Downloading league/config (v1.2.0)
+2025-07-16T21:55:12.392258208Z #16 0.216   - Downloading league/commonmark (2.7.0)
+2025-07-16T21:55:12.392260208Z #16 0.216   - Downloading laravel/serializable-closure (v2.0.4)
+2025-07-16T21:55:12.392262208Z #16 0.216   - Downloading laravel/prompts (v0.3.5)
+2025-07-16T21:55:12.392264269Z #16 0.217   - Downloading laravel/framework (v12.15.0)
+2025-07-16T21:55:12.392266299Z #16 0.217   - Downloading laravel/pail (v1.2.2)
+2025-07-16T21:55:12.392268599Z #16 0.217   - Downloading laravel/pint (v1.22.1)
+2025-07-16T21:55:12.392270629Z #16 0.217   - Downloading symfony/yaml (v7.2.6)
+2025-07-16T21:55:12.392272729Z #16 0.217   - Downloading laravel/sail (v1.43.0)
+2025-07-16T21:55:12.39229194Z #16 0.218   - Downloading nikic/php-parser (v5.4.0)
+2025-07-16T21:55:12.392296131Z #16 0.218   - Downloading psy/psysh (v0.12.8)
+2025-07-16T21:55:12.392307701Z #16 0.218   - Downloading laravel/tinker (v2.10.1)
+2025-07-16T21:55:12.392310891Z #16 0.218   - Downloading hamcrest/hamcrest-php (v2.1.1)
+2025-07-16T21:55:12.392314002Z #16 0.219   - Downloading mockery/mockery (1.6.12)
+2025-07-16T21:55:12.392317622Z #16 0.219   - Downloading filp/whoops (2.18.0)
+2025-07-16T21:55:12.392319712Z #16 0.219   - Downloading nunomaduro/collision (v8.8.0)
+2025-07-16T21:55:12.392321762Z #16 0.219   - Downloading staabm/side-effects-detector (1.0.5)
+2025-07-16T21:55:12.392323762Z #16 0.219   - Downloading sebastian/version (5.0.2)
+2025-07-16T21:55:12.392325783Z #16 0.220   - Downloading sebastian/type (5.1.2)
+2025-07-16T21:55:12.392327863Z #16 0.220   - Downloading sebastian/recursion-context (6.0.2)
+2025-07-16T21:55:12.392329893Z #16 0.220   - Downloading sebastian/object-reflector (4.0.1)
+2025-07-16T21:55:12.392331963Z #16 0.220   - Downloading sebastian/object-enumerator (6.0.1)
+2025-07-16T21:55:12.392333993Z #16 0.221   - Downloading sebastian/global-state (7.0.2)
+2025-07-16T21:55:12.392336013Z #16 0.221   - Downloading sebastian/exporter (6.3.0)
+2025-07-16T21:55:12.392338083Z #16 0.221   - Downloading sebastian/environment (7.2.1)
+2025-07-16T21:55:12.392349504Z #16 0.221   - Downloading sebastian/diff (6.0.2)
+2025-07-16T21:55:12.392351814Z #16 0.221   - Downloading sebastian/comparator (6.3.1)
+2025-07-16T21:55:12.392353874Z #16 0.221   - Downloading sebastian/code-unit (3.0.3)
+2025-07-16T21:55:12.392356174Z #16 0.222   - Downloading sebastian/cli-parser (3.0.2)
+2025-07-16T21:55:12.392358254Z #16 0.222   - Downloading phpunit/php-timer (7.0.1)
+2025-07-16T21:55:12.392360405Z #16 0.222   - Downloading phpunit/php-text-template (4.0.1)
+2025-07-16T21:55:12.392362415Z #16 0.222   - Downloading phpunit/php-invoker (5.0.1)
+2025-07-16T21:55:12.392364445Z #16 0.222   - Downloading phpunit/php-file-iterator (5.1.0)
+2025-07-16T21:55:12.392366475Z #16 0.223   - Downloading theseer/tokenizer (1.2.3)
+2025-07-16T21:55:12.392368535Z #16 0.223   - Downloading sebastian/lines-of-code (3.0.1)
+2025-07-16T21:55:12.392370585Z #16 0.223   - Downloading sebastian/complexity (4.0.1)
+2025-07-16T21:55:12.392372685Z #16 0.223   - Downloading sebastian/code-unit-reverse-lookup (4.0.1)
+2025-07-16T21:55:12.392375065Z #16 0.223   - Downloading phpunit/php-code-coverage (11.0.9)
+2025-07-16T21:55:12.392378266Z #16 0.224   - Downloading phar-io/version (3.2.1)
+2025-07-16T21:55:12.392381906Z #16 0.224   - Downloading phar-io/manifest (2.0.4)
+2025-07-16T21:55:12.392385046Z #16 0.224   - Downloading myclabs/deep-copy (1.13.1)
+2025-07-16T21:55:12.392388376Z #16 0.224   - Downloading phpunit/phpunit (11.5.21)
+2025-07-16T21:55:12.96452589Z #16 0.252    0/110 [>---------------------------]   0%
+2025-07-16T21:55:12.964543611Z #16 0.827   11/110 [==>-------------------------]  10%
+2025-07-16T21:55:13.265849697Z #16 0.932   25/110 [======>---------------------]  22%
+2025-07-16T21:55:13.397320288Z #16 1.139   39/110 [=========>------------------]  35%
+2025-07-16T21:55:13.39733979Z #16 1.261   48/110 [============>---------------]  43%
+2025-07-16T21:55:13.497751387Z #16 1.364   55/110 [==============>-------------]  50%
+2025-07-16T21:55:13.906482933Z #16 1.465   66/110 [================>-----------]  60%
+2025-07-16T21:55:13.906500214Z #16 1.772   83/110 [=====================>------]  75%
+2025-07-16T21:55:14.207527103Z #16 1.874   90/110 [======================>-----]  81%
+2025-07-16T21:55:14.460945861Z #16 2.080  102/110 [=========================>--]  92%
+2025-07-16T21:55:14.460968862Z #16 2.424  110/110 [============================] 100%
+2025-07-16T21:55:14.460973462Z #16 2.424   - Installing doctrine/inflector (2.0.10): Extracting archive
+2025-07-16T21:55:14.460990073Z #16 2.428   - Installing doctrine/lexer (3.0.1): Extracting archive
+2025-07-16T21:55:14.611010623Z #16 2.430   - Installing symfony/polyfill-ctype (v1.32.0): Extracting archive
+2025-07-16T21:55:14.611035565Z #16 2.432   - Installing webmozart/assert (1.11.0): Extracting archive
+2025-07-16T21:55:14.611039255Z #16 2.434   - Installing dragonmantank/cron-expression (v3.4.0): Extracting archive
+2025-07-16T21:55:14.611042245Z #16 2.436   - Installing symfony/deprecation-contracts (v3.6.0): Extracting archive
+2025-07-16T21:55:14.611044725Z #16 2.438   - Installing psr/container (2.0.2): Extracting archive
+2025-07-16T21:55:14.611047286Z #16 2.440   - Installing fakerphp/faker (v1.24.1): Extracting archive
+2025-07-16T21:55:14.611049636Z #16 2.442   - Installing symfony/polyfill-php83 (v1.32.0): Extracting archive
+2025-07-16T21:55:14.611051866Z #16 2.444   - Installing symfony/polyfill-mbstring (v1.32.0): Extracting archive
+2025-07-16T21:55:14.611054216Z #16 2.446   - Installing symfony/http-foundation (v7.2.6): Extracting archive
+2025-07-16T21:55:14.611056526Z #16 2.446   - Installing fruitcake/php-cors (v1.3.0): Extracting archive
+2025-07-16T21:55:14.611058806Z #16 2.447   - Installing psr/http-message (2.0): Extracting archive
+2025-07-16T21:55:14.611061056Z #16 2.447   - Installing psr/http-client (1.0.3): Extracting archive
+2025-07-16T21:55:14.611063336Z #16 2.447   - Installing ralouphie/getallheaders (3.0.3): Extracting archive
+2025-07-16T21:55:14.611065587Z #16 2.447   - Installing psr/http-factory (1.1.0): Extracting archive
+2025-07-16T21:55:14.611067797Z #16 2.448   - Installing guzzlehttp/psr7 (2.7.1): Extracting archive
+2025-07-16T21:55:14.611070227Z #16 2.448   - Installing guzzlehttp/promises (2.2.0): Extracting archive
+2025-07-16T21:55:14.611072537Z #16 2.448   - Installing guzzlehttp/guzzle (7.9.3): Extracting archive
+2025-07-16T21:55:14.611074937Z #16 2.448   - Installing symfony/polyfill-php80 (v1.32.0): Extracting archive
+2025-07-16T21:55:14.611077267Z #16 2.449   - Installing guzzlehttp/uri-template (v1.0.4): Extracting archive
+2025-07-16T21:55:14.611079657Z #16 2.449   - Installing symfony/polyfill-intl-normalizer (v1.32.0): Extracting archive
+2025-07-16T21:55:14.611081897Z #16 2.449   - Installing symfony/polyfill-intl-grapheme (v1.32.0): Extracting archive
+2025-07-16T21:55:14.611084198Z #16 2.450   - Installing symfony/string (v7.2.6): Extracting archive
+2025-07-16T21:55:14.611086468Z #16 2.450   - Installing symfony/service-contracts (v3.6.0): Extracting archive
+2025-07-16T21:55:14.611088728Z #16 2.450   - Installing symfony/console (v7.2.6): Extracting archive
+2025-07-16T21:55:14.611091898Z #16 2.450   - Installing nunomaduro/termwind (v2.3.1): Extracting archive
+2025-07-16T21:55:14.611094208Z #16 2.451   - Installing voku/portable-ascii (2.0.3): Extracting archive
+2025-07-16T21:55:14.611096518Z #16 2.451   - Installing phpoption/phpoption (1.9.3): Extracting archive
+2025-07-16T21:55:14.611098829Z #16 2.451   - Installing graham-campbell/result-type (v1.1.3): Extracting archive
+2025-07-16T21:55:14.611101099Z #16 2.452   - Installing vlucas/phpdotenv (v5.6.2): Extracting archive
+2025-07-16T21:55:14.611103649Z #16 2.452   - Installing symfony/css-selector (v7.2.0): Extracting archive
+2025-07-16T21:55:14.611105949Z #16 2.452   - Installing tijsverkoyen/css-to-inline-styles (v2.3.0): Extracting archive
+2025-07-16T21:55:14.611108279Z #16 2.452   - Installing symfony/var-dumper (v7.2.6): Extracting archive
+2025-07-16T21:55:14.611110509Z #16 2.453   - Installing symfony/polyfill-uuid (v1.32.0): Extracting archive
+2025-07-16T21:55:14.61111595Z #16 2.453   - Installing symfony/uid (v7.2.0): Extracting archive
+2025-07-16T21:55:14.61111842Z #16 2.453   - Installing symfony/routing (v7.2.3): Extracting archive
+2025-07-16T21:55:14.611134221Z #16 2.454   - Installing symfony/process (v7.2.5): Extracting archive
+2025-07-16T21:55:14.611136671Z #16 2.454   - Installing symfony/polyfill-intl-idn (v1.32.0): Extracting archive
+2025-07-16T21:55:14.611138831Z #16 2.454   - Installing symfony/mime (v7.2.6): Extracting archive
+2025-07-16T21:55:14.611141301Z #16 2.454   - Installing psr/event-dispatcher (1.0.0): Extracting archive
+2025-07-16T21:55:14.611143851Z #16 2.455   - Installing symfony/event-dispatcher-contracts (v3.6.0): Extracting archive
+2025-07-16T21:55:14.611146161Z #16 2.455   - Installing symfony/event-dispatcher (v7.2.0): Extracting archive
+2025-07-16T21:55:14.611148982Z #16 2.455   - Installing psr/log (3.0.2): Extracting archive
+2025-07-16T21:55:14.611151452Z #16 2.456   - Installing egulias/email-validator (4.0.4): Extracting archive
+2025-07-16T21:55:14.611153852Z #16 2.456   - Installing symfony/mailer (v7.2.6): Extracting archive
+2025-07-16T21:55:14.611156312Z #16 2.456   - Installing symfony/error-handler (v7.2.5): Extracting archive
+2025-07-16T21:55:14.611158802Z #16 2.456   - Installing symfony/http-kernel (v7.2.6): Extracting archive
+2025-07-16T21:55:14.611161182Z #16 2.457   - Installing symfony/finder (v7.2.2): Extracting archive
+2025-07-16T21:55:14.611163533Z #16 2.457   - Installing ramsey/collection (2.1.1): Extracting archive
+2025-07-16T21:55:14.611165963Z #16 2.457   - Installing brick/math (0.12.3): Extracting archive
+2025-07-16T21:55:14.611168533Z #16 2.458   - Installing ramsey/uuid (4.7.6): Extracting archive
+2025-07-16T21:55:14.611170863Z #16 2.458   - Installing psr/simple-cache (3.0.0): Extracting archive
+2025-07-16T21:55:14.611202335Z #16 2.458   - Installing symfony/translation-contracts (v3.6.0): Extracting archive
+2025-07-16T21:55:14.611208755Z #16 2.458   - Installing symfony/translation (v7.2.6): Extracting archive
+2025-07-16T21:55:14.611211155Z #16 2.459   - Installing psr/clock (1.0.0): Extracting archive
+2025-07-16T21:55:14.611213516Z #16 2.459   - Installing symfony/clock (v7.2.0): Extracting archive
+2025-07-16T21:55:14.611215686Z #16 2.459   - Installing carbonphp/carbon-doctrine-types (3.2.0): Extracting archive
+2025-07-16T21:55:14.611218096Z #16 2.460   - Installing nesbot/carbon (3.9.1): Extracting archive
+2025-07-16T21:55:14.611220356Z #16 2.460   - Installing monolog/monolog (3.9.0): Extracting archive
+2025-07-16T21:55:14.611222756Z #16 2.460   - Installing league/uri-interfaces (7.5.0): Extracting archive
+2025-07-16T21:55:14.611224976Z #16 2.460   - Installing league/uri (7.5.1): Extracting archive
+2025-07-16T21:55:14.611227166Z #16 2.461   - Installing league/mime-type-detection (1.16.0): Extracting archive
+2025-07-16T21:55:14.611229426Z #16 2.461   - Installing league/flysystem-local (3.29.0): Extracting archive
+2025-07-16T21:55:14.611231607Z #16 2.461   - Installing league/flysystem (3.29.1): Extracting archive
+2025-07-16T21:55:14.611233797Z #16 2.462   - Installing nette/utils (v4.0.6): Extracting archive
+2025-07-16T21:55:14.611235947Z #16 2.462   - Installing nette/schema (v1.3.2): Extracting archive
+2025-07-16T21:55:14.611238127Z #16 2.462   - Installing dflydev/dot-access-data (v3.0.3): Extracting archive
+2025-07-16T21:55:14.611250428Z #16 2.462   - Installing league/config (v1.2.0): Extracting archive
+2025-07-16T21:55:14.611252848Z #16 2.463   - Installing league/commonmark (2.7.0): Extracting archive
+2025-07-16T21:55:14.611255108Z #16 2.463   - Installing laravel/serializable-closure (v2.0.4): Extracting archive
+2025-07-16T21:55:14.611257478Z #16 2.463   - Installing laravel/prompts (v0.3.5): Extracting archive
+2025-07-16T21:55:14.611259678Z #16 2.464   - Installing laravel/framework (v12.15.0): Extracting archive
+2025-07-16T21:55:14.611268929Z #16 2.464   - Installing laravel/pail (v1.2.2): Extracting archive
+2025-07-16T21:55:14.611271429Z #16 2.464   - Installing laravel/pint (v1.22.1): Extracting archive
+2025-07-16T21:55:14.611273579Z #16 2.464   - Installing symfony/yaml (v7.2.6): Extracting archive
+2025-07-16T21:55:14.61128311Z #16 2.465   - Installing laravel/sail (v1.43.0): Extracting archive
+2025-07-16T21:55:14.61128548Z #16 2.465   - Installing nikic/php-parser (v5.4.0): Extracting archive
+2025-07-16T21:55:14.61128772Z #16 2.465   - Installing psy/psysh (v0.12.8): Extracting archive
+2025-07-16T21:55:14.61129001Z #16 2.466   - Installing laravel/tinker (v2.10.1): Extracting archive
+2025-07-16T21:55:14.61129219Z #16 2.466   - Installing hamcrest/hamcrest-php (v2.1.1): Extracting archive
+2025-07-16T21:55:14.61129457Z #16 2.466   - Installing mockery/mockery (1.6.12): Extracting archive
+2025-07-16T21:55:14.611296881Z #16 2.467   - Installing filp/whoops (2.18.0): Extracting archive
+2025-07-16T21:55:14.611299051Z #16 2.467   - Installing nunomaduro/collision (v8.8.0): Extracting archive
+2025-07-16T21:55:14.611301271Z #16 2.467   - Installing staabm/side-effects-detector (1.0.5): Extracting archive
+2025-07-16T21:55:14.611303411Z #16 2.467   - Installing sebastian/version (5.0.2): Extracting archive
+2025-07-16T21:55:14.611305611Z #16 2.468   - Installing sebastian/type (5.1.2): Extracting archive
+2025-07-16T21:55:14.611307951Z #16 2.468   - Installing sebastian/recursion-context (6.0.2): Extracting archive
+2025-07-16T21:55:14.611310131Z #16 2.468   - Installing sebastian/object-reflector (4.0.1): Extracting archive
+2025-07-16T21:55:14.611312362Z #16 2.469   - Installing sebastian/object-enumerator (6.0.1): Extracting archive
+2025-07-16T21:55:14.611314552Z #16 2.469   - Installing sebastian/global-state (7.0.2): Extracting archive
+2025-07-16T21:55:14.611316702Z #16 2.469   - Installing sebastian/exporter (6.3.0): Extracting archive
+2025-07-16T21:55:14.611318882Z #16 2.470   - Installing sebastian/environment (7.2.1): Extracting archive
+2025-07-16T21:55:14.611321112Z #16 2.470   - Installing sebastian/diff (6.0.2): Extracting archive
+2025-07-16T21:55:14.611323272Z #16 2.470   - Installing sebastian/comparator (6.3.1): Extracting archive
+2025-07-16T21:55:14.611325402Z #16 2.470   - Installing sebastian/code-unit (3.0.3): Extracting archive
+2025-07-16T21:55:14.611327572Z #16 2.471   - Installing sebastian/cli-parser (3.0.2): Extracting archive
+2025-07-16T21:55:14.611329783Z #16 2.471   - Installing phpunit/php-timer (7.0.1): Extracting archive
+2025-07-16T21:55:14.611331973Z #16 2.471   - Installing phpunit/php-text-template (4.0.1): Extracting archive
+2025-07-16T21:55:14.611334123Z #16 2.472   - Installing phpunit/php-invoker (5.0.1): Extracting archive
+2025-07-16T21:55:14.611336273Z #16 2.472   - Installing phpunit/php-file-iterator (5.1.0): Extracting archive
+2025-07-16T21:55:14.611338423Z #16 2.472   - Installing theseer/tokenizer (1.2.3): Extracting archive
+2025-07-16T21:55:14.611340563Z #16 2.473   - Installing sebastian/lines-of-code (3.0.1): Extracting archive
+2025-07-16T21:55:14.611342713Z #16 2.473   - Installing sebastian/complexity (4.0.1): Extracting archive
+2025-07-16T21:55:14.611344884Z #16 2.473   - Installing sebastian/code-unit-reverse-lookup (4.0.1): Extracting archive
+2025-07-16T21:55:14.611347113Z #16 2.473   - Installing phpunit/php-code-coverage (11.0.9): Extracting archive
+2025-07-16T21:55:14.611349304Z #16 2.474   - Installing phar-io/version (3.2.1): Extracting archive
+2025-07-16T21:55:14.611351494Z #16 2.474   - Installing phar-io/manifest (2.0.4): Extracting archive
+2025-07-16T21:55:14.611353644Z #16 2.474   - Installing myclabs/deep-copy (1.13.1): Extracting archive
+2025-07-16T21:55:14.611359264Z #16 2.475   - Installing phpunit/phpunit (11.5.21): Extracting archive
+2025-07-16T21:55:14.76148443Z #16 2.494    0/110 [>---------------------------]   0%
+2025-07-16T21:55:14.91233317Z #16 2.655   17/110 [====>-----------------------]  15%
+2025-07-16T21:55:15.037440537Z #16 2.772   27/110 [======>---------------------]  24%
+2025-07-16T21:55:15.037462699Z #16 2.897   47/110 [===========>----------------]  42%
+2025-07-16T21:55:15.290999773Z #16 3.004   55/110 [==============>-------------]  50%
+2025-07-16T21:55:15.591441587Z #16 3.258   70/110 [=================>----------]  63%
+2025-07-16T21:55:15.742579704Z #16 3.481   78/110 [===================>--------]  70%
+2025-07-16T21:55:15.876314072Z #16 3.610   92/110 [=======================>----]  83%
+2025-07-16T21:55:15.876330283Z #16 3.725  105/110 [==========================>-]  95%
+2025-07-16T21:55:15.876333953Z #16 3.843  110/110 [============================] 100%
+2025-07-16T21:55:16.327552022Z #16 4.174 Generating optimized autoload files
+2025-07-16T21:55:17.981456852Z #16 5.834 > Illuminate\Foundation\ComposerScripts::postAutoloadDump
+2025-07-16T21:55:17.981479384Z #16 5.851 > @php artisan package:discover --ansi
+2025-07-16T21:55:18.12663525Z #16 5.984
+2025-07-16T21:55:18.126662711Z #16 5.984    INFO  Discovering packages.
+2025-07-16T21:55:18.126666262Z #16 5.984
+2025-07-16T21:55:18.126669992Z #16 5.987   laravel/pail .......................................................... DONE
+2025-07-16T21:55:18.126674862Z #16 5.988   laravel/sail .......................................................... DONE
+2025-07-16T21:55:18.126677843Z #16 5.988   laravel/tinker ........................................................ DONE
+2025-07-16T21:55:18.126680673Z #16 5.989   nesbot/carbon ......................................................... DONE
+2025-07-16T21:55:18.126692573Z #16 5.989   nunomaduro/collision .................................................. DONE
+2025-07-16T21:55:18.126694444Z #16 5.990   nunomaduro/termwind ................................................... DONE
+2025-07-16T21:55:18.126704844Z #16 5.990
+2025-07-16T21:55:18.126706704Z #16 6.000 80 packages you are using are looking for funding.
+2025-07-16T21:55:18.126708434Z #16 6.000 Use the `composer fund` command to find out more!
+2025-07-16T21:55:18.126710104Z #16 DONE 6.1s
+2025-07-16T21:55:18.252647121Z
+2025-07-16T21:55:18.252683514Z #17 [stage-0 8/9] COPY ./apache/laravel.conf /etc/apache2/sites-available/000-default.conf
+2025-07-16T21:55:18.252690804Z #17 DONE 0.1s
+2025-07-16T21:55:18.403299029Z
+2025-07-16T21:55:18.403325821Z #18 [stage-0 9/9] RUN chown -R www-data:www-data /var/www/html     && chmod -R 755 /var/www/html     && chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+2025-07-16T21:55:46.059952118Z #18 DONE 27.7s
+2025-07-16T21:55:46.05997254Z
+2025-07-16T21:55:46.05998002Z #19 exporting to docker image format
+2025-07-16T21:55:46.05998602Z #19 exporting layers
+2025-07-16T21:55:49.276846163Z #19 exporting layers 3.1s done
+2025-07-16T21:55:49.276873584Z #19 exporting manifest sha256:76db52474dca344b9553da9f20aa2c1e8ea8e8e3557fc143e7ce5d83e2ea9119 done
+2025-07-16T21:55:49.276879114Z #19 exporting config sha256:0a8ac80f530fb856fd117b242ab319898039b91321c131e1a38f1dd45307e08a done
+2025-07-16T21:55:53.880607571Z #19 DONE 7.9s
+2025-07-16T21:55:54.030753118Z
+2025-07-16T21:55:54.030773909Z #20 exporting cache to client directory
+2025-07-16T21:55:54.030777589Z #20 preparing build cache for export
+2025-07-16T21:55:54.960723773Z #20 writing cache manifest sha256:203cea701e79708a7776d145a15316fd0cd0df9e30bc731378a1f0121c9ac50d done
+2025-07-16T21:55:54.960742814Z #20 DONE 1.0s
+2025-07-16T21:55:56.28594735Z Pushing image to registry...
+2025-07-16T21:55:59.833859717Z Upload succeeded
+2025-07-16T21:56:02.831130582Z ==> Deploying...
+2025-07-16T21:56:13.661761569Z AH00558: apache2: Could not reliably determine the server's fully qualified domain name, using 10.214.226.8. Set the 'ServerName' directive globally to suppress this message
+2025-07-16T21:56:13.754814216Z AH00558: apache2: Could not reliably determine the server's fully qualified domain name, using 10.214.226.8. Set the 'ServerName' directive globally to suppress this message
+2025-07-16T21:56:13.865467625Z [Wed Jul 16 21:56:13.865255 2025] [mpm_prefork:notice] [pid 1:tid 1] AH00163: Apache/2.4.62 (Debian) PHP/8.2.20 configured -- resuming normal operations
+2025-07-16T21:56:13.865486336Z [Wed Jul 16 21:56:13.865304 2025] [core:notice] [pid 1:tid 1] AH00094: Command line: 'apache2 -D FOREGROUND'
+2025-07-16T21:56:16.5595185Z ::1 - - [16/Jul/2025:21:56:15 +0000] "HEAD / HTTP/1.1" 500 226 "-" "Go-http-client/1.1"
+2025-07-16T21:56:24.668694695Z ==> Your service is live 🎉
+2025-07-16T21:56:24.700360063Z ==>
+2025-07-16T21:56:24.724445871Z ==> ///////////////////////////////////////////////////////////
+2025-07-16T21:56:24.749960709Z ==>
+2025-07-16T21:56:24.772956097Z ==> Available at your primary URL https://torrainteligente.onrender.com
+2025-07-16T21:56:24.797545106Z ==>
+2025-07-16T21:56:24.822233674Z ==> ///////////////////////////////////////////////////////////
+2025-07-16T21:56:26.645092439Z ::1 - - [16/Jul/2025:21:56:25 +0000] "GET / HTTP/1.1" 500 6876 "-" "Go-http-client/2.0"

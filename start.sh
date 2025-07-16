@@ -49,4 +49,5 @@ php artisan view:cache || echo "View cache falhou"
 echo "🎉 Aplicação iniciada com sucesso!"
 
 # Iniciar servidor web
-php artisan serve --host=0.0.0.0 --port=$PORT
+echo "🌐 Iniciando Apache..."
+exec apache2-foreground

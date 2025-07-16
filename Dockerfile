@@ -28,4 +28,10 @@ RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 755 /var/www/html \
     && chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
+# Torna o start.sh executável
+RUN chmod +x /var/www/html/start.sh
+
 EXPOSE 80
+
+# Usar start.sh como entrypoint
+ENTRYPOINT ["/var/www/html/start.sh"]
