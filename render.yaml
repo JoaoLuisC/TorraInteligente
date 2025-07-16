@@ -1,0 +1,35 @@
+version: "1"
+
+services:
+  - type: web
+    name: torra-inteligente
+    runtime: docker
+    plan: free
+    region: oregon
+    buildCommand: chmod +x build.sh && ./build.sh
+    startCommand: chmod +x start.sh && ./start.sh
+    envVars:
+      - key: APP_NAME
+        value: "Torra Inteligente"
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: "false"
+      - key: APP_LOCALE
+        value: pt_BR
+      - key: LOG_LEVEL
+        value: error
+      - key: SESSION_DRIVER
+        value: database
+      - key: CACHE_STORE
+        value: database
+      - key: QUEUE_CONNECTION
+        value: database
+      - key: MAIL_MAILER
+        value: log
+
+databases:
+  - name: torra-inteligente-db
+    plan: free
+    databaseName: michelangelo_bd
+    user: postgres

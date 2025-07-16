@@ -6,9 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Torrador extends Model
 {
-    protected $table = 'torradores';
+    protected $table = 'torradors';
     protected $primaryKey = 'id';
-    
+
     protected $fillable = [
         'nome',
         'usuario_id',
