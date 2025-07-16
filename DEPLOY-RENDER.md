@@ -8,7 +8,7 @@
 3. Configure:
    - **Name**: `torra-inteligente-db`
    - **Database Name**: `michelangelo_bd`
-   - **User**: `postgres`
+   - **User**: `torrauser`
    - **Plan**: `Free`
    - **Region**: `Oregon`
 4. Clique em **"Create Database"**
