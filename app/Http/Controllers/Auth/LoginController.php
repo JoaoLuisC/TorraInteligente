@@ -18,9 +18,10 @@ class LoginController extends Controller
 
     public function login(Request $request)
     {
+        // Mapear 'password' do form para 'senha' do banco
         $credentials = [
             'email' => $request->email,
-            'password' => $request->password, // Use 'senha' pois seu campo no banco é esse
+            'senha' => $request->password,
         ];
 
         if (Auth::attempt($credentials)) {

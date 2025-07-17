@@ -21,7 +21,7 @@ class RegisterController extends Controller
        $validator = Validator::make($request->all(), [
             'firstName' => 'required|string|max:255',
             'lastName' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
+            'email' => 'required|email|unique:usuarios,email',
             'role' => 'required|in:analista,administrador,produtor',
             'password' => 'required|string|confirmed|min:8',
         ]);
@@ -30,13 +30,14 @@ class RegisterController extends Controller
             return back()->withErrors($validator)->withInput();
         }
 
-        // Combine firstName and lastName into name field
+        // Combine firstName and lastName into nome field
         $fullName = trim($request->firstName . ' ' . $request->lastName);
 
         $user = User::create([
-            'name' => $fullName,
+            'nome' => $fullName,
             'email' => $request->email,
-            'password' => Hash::make($request->password),
+            'senha' => Hash::make($request->password),
+            'tipo' => ucfirst($request->role),
         ]);
 
         Auth::login($user);

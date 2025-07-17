@@ -18,7 +18,7 @@ class InitDatabase extends Command
         // Verificar se as tabelas já existem
         if (!$this->option('force')) {
             try {
-                DB::table('usuarios')->count();
+                DB::table('users')->count();
                 $this->info('✅ Tabelas já existem. Use --force para recriar.');
                 return 0;
             } catch (\Exception $e) {

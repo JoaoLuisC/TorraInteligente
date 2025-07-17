@@ -12,18 +12,19 @@ class User extends Authenticatable
     use HasFactory, Notifiable;
 
     // Define a tabela correta
-    protected $table = 'users';
+    protected $table = 'usuarios';
 
     // Campos que podem ser preenchidos em massa
     protected $fillable = [
-        'name',
+        'nome',
         'email',
-        'password',
+        'senha',
+        'tipo',
     ];
 
     // Esconde o campo senha na serialização
     protected $hidden = [
-        'password',
+        'senha',
         'remember_token',
     ];
 
@@ -33,13 +34,19 @@ class User extends Authenticatable
     // Define o campo de senha para autenticação
     public function getAuthPassword()
     {
-        return $this->password;
+        return $this->senha;
     }
 
-    // Permite acessar 'name' como alias para 'nome'
+    // Mapeia os campos para compatibilidade com Laravel Auth
     public function getNameAttribute()
     {
         return $this->nome;
+    }
+
+    // Laravel Auth usa 'password', mas nossa tabela usa 'senha'
+    public function getAuthPasswordName()
+    {
+        return 'senha';
     }
 
     public function torradores()
