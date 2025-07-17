@@ -18,10 +18,10 @@ class LoginController extends Controller
 
     public function login(Request $request)
     {
-        // Mapear 'password' do form para 'senha' do banco
+        // Usar os nomes padrão que o Laravel espera
         $credentials = [
             'email' => $request->email,
-            'senha' => $request->password,
+            'password' => $request->password,
         ];
 
         if (Auth::attempt($credentials)) {

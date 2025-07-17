@@ -12,6 +12,7 @@ class Torrador extends Model
 
     // Define qual campo de timestamp usar
     const CREATED_AT = 'criado_em';
+    const UPDATED_AT = null; // Desabilita updated_at
 
     protected $fillable = [
         'nome',

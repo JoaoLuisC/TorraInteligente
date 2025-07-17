@@ -13,24 +13,23 @@ services:
       - node
     environment:
       - DB_HOST=db
-      - DB_DATABASE=michelangelo_bd
-      - DB_USERNAME=laravel
-      - DB_PASSWORD=secret
+      - DB_DATABASE=michelangelo_bd_local
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=postgres
 
   db:
-    image: mysql:8.0
-    container_name: db
+    image: postgres:16
+    container_name: postgres-local
     restart: always
     ports:
-      - "3306:3306"
+      - "5432:5432"
     environment:
-      MYSQL_DATABASE: michelangelo_bd
-      MYSQL_USER: laravel
-      MYSQL_PASSWORD: secret
-      MYSQL_ROOT_PASSWORD: root
+      POSTGRES_DATABASE: michelangelo_bd_local
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
     volumes:
-      - dbdata:/var/lib/mysql
-      - ./docker/mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - dbdata:/var/lib/postgresql/data
+      - ./docker/postgresql/init.sql:/docker-entrypoint-initdb.d/init.sql
 
   node:
     image: node:20

@@ -30,11 +30,14 @@ class RegisterController extends Controller
             return back()->withErrors($validator)->withInput();
         }
 
-        // Combine firstName and lastName into nome field
-        $fullName = trim($request->firstName . ' ' . $request->lastName);
+        // Split fullName into nome and sobrenome
+        $nameParts = explode(' ', trim($request->firstName . ' ' . $request->lastName), 2);
+        $nome = $nameParts[0];
+        $sobrenome = isset($nameParts[1]) ? $nameParts[1] : '';
 
         $user = User::create([
-            'nome' => $fullName,
+            'nome' => $nome,
+            'sobrenome' => $sobrenome,
             'email' => $request->email,
             'senha' => Hash::make($request->password),
             'tipo' => ucfirst($request->role),

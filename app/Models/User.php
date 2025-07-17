@@ -17,6 +17,7 @@ class User extends Authenticatable
     // Campos que podem ser preenchidos em massa
     protected $fillable = [
         'nome',
+        'sobrenome',
         'email',
         'senha',
         'tipo',
@@ -28,11 +29,12 @@ class User extends Authenticatable
         'remember_token',
     ];
 
-        // Ativa os timestamps padrão do Laravel, mas só criado_em
+    // Ativa os timestamps padrão do Laravel, mas só criado_em
     public $timestamps = true;
 
     // Define qual campo de timestamp usar
     const CREATED_AT = 'criado_em';
+    const UPDATED_AT = null; // Desabilita updated_at
 
     // Define o campo de senha para autenticação
     public function getAuthPassword()
@@ -40,16 +42,28 @@ class User extends Authenticatable
         return $this->senha;
     }
 
-    // Mapeia os campos para compatibilidade com Laravel Auth
-    public function getNameAttribute()
-    {
-        return $this->nome;
-    }
-
     // Laravel Auth usa 'password', mas nossa tabela usa 'senha'
     public function getAuthPasswordName()
     {
         return 'senha';
+    }
+
+    // Accessor para password -> mapeado para senha
+    public function getPasswordAttribute()
+    {
+        return $this->senha;
+    }
+
+    // Mutator para password -> salva em senha
+    public function setPasswordAttribute($value)
+    {
+        $this->attributes['senha'] = $value;
+    }
+
+    // Mapeia os campos para compatibilidade com Laravel Auth
+    public function getNameAttribute()
+    {
+        return $this->nome;
     }
 
     public function torradores()
