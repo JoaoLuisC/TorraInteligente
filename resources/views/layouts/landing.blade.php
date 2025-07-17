@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jsvectormap@1.5.3/dist/css/jsvectormap.min.css" integrity="sha256-+uGLJmmTKOqBr+2E6KDYs/NRsHxSkONXFHUL0fy2O/4=" crossorigin="anonymous" />
     <link rel="stylesheet" href="{{ asset('css/Admin_Lte/adminlte.css') }}"/>
     @vite('resources/css/footer.css')
-    
+
     @stack('styles')
     <style>
         .hero-header {
@@ -74,8 +74,8 @@
                                     {{ Auth::user()->name }} {{ Auth::user()->sobrenome }}
                                     <small>
                                         Membro desde
-                                        @if(Auth::user()->created_at)
-                                            {{ Auth::user()->created_at->format('Y/m/d') }}
+                                        @if(Auth::user()->criado_em)
+                                            {{ Auth::user()->criado_em->format('Y/m/d') }}
                                         @else
                                             Data não disponível
                                         @endif

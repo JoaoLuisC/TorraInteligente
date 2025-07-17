@@ -8,7 +8,10 @@ class Torrador extends Model
 {
     protected $table = 'torradors';
     protected $primaryKey = 'id';
-    public $timestamps = false;
+    public $timestamps = true;
+
+    // Define qual campo de timestamp usar
+    const CREATED_AT = 'criado_em';
 
     protected $fillable = [
         'nome',
