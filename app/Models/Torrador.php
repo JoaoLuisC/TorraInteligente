@@ -8,6 +8,7 @@ class Torrador extends Model
 {
     protected $table = 'torradors';
     protected $primaryKey = 'id';
+    public $timestamps = false;
 
     protected $fillable = [
         'nome',
@@ -16,5 +17,9 @@ class Torrador extends Model
     ];
 
     protected $dates = ['criado_em'];
-    public $timestamps = false;
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'usuario_id');
+    }
 }

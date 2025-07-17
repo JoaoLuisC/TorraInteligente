@@ -12,41 +12,34 @@ class User extends Authenticatable
     use HasFactory, Notifiable;
 
     // Define a tabela correta
-    protected $table = 'usuarios';
+    protected $table = 'users';
 
     // Campos que podem ser preenchidos em massa
     protected $fillable = [
-        'nome',
-        'sobrenome',
-        'tipo',
+        'name',
         'email',
-        'senha',
+        'password',
     ];
 
     // Esconde o campo senha na serialização
     protected $hidden = [
-        'senha',
+        'password',
+        'remember_token',
     ];
 
-    // Desativa os timestamps padrão do Laravel
-    public $timestamps = false;
+    // Ativa os timestamps padrão do Laravel
+    public $timestamps = true;
 
     // Define o campo de senha para autenticação
     public function getAuthPassword()
     {
-        return $this->senha;
+        return $this->password;
     }
 
     // Permite acessar 'name' como alias para 'nome'
     public function getNameAttribute()
     {
         return $this->nome;
-    }
-
-    public function getCreatedAtAttribute()
-    {
-        $value = $this->attributes['criado_em'] ?? null;
-        return $value ? Carbon::parse($value) : null;
     }
 
     public function torradores()
