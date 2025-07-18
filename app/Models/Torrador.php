@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Torrador extends Model
 {
-    protected $table = 'torradors';
+    protected $table = 'torradores';
     protected $primaryKey = 'id';
     public $timestamps = true;
 
