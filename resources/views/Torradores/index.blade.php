@@ -1,6 +1,7 @@
 @extends('master')
 
 @section('title', 'Meus Torradores')
+@section('breadcrumb-title', 'Lista de Torradores')
 
 @section('MainContent')
 <div class="container-fluid">

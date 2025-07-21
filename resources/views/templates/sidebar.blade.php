@@ -2,8 +2,9 @@
 
     <!--Titulo SideBar-->
     <div class="sidebar-brand">
-        <a href="../index.html" class="brand-link">
-            <img src="../images/michelangeloTXT.png" alt="AdminLTE Logo" class="brand-image opacity-75 shadow" />
+        <a href="{{ route('dashboard') }}" class="brand-link" style="color: white; text-decoration: none;">
+            <!-- <img src="../images/michelangeloTXT.png" alt="AdminLTE Logo" class="brand-image opacity-75 shadow" /> -->
+            <h2 style="color: white;">MICHELANGELO</h2>
         </a>
     </div>
 
@@ -21,7 +22,7 @@
                     <ul class="nav nav-treeview ms-3">
 
                         <li class="nav-item">
-                            <a href="{{ route('torradores.index') }}" class="nav-link">
+                            <a href="{{ route('torradores.index') }}" class="nav-link ajax-link">
                                 <img src="{{ asset('images/icons/torrador_de_cafe.png') }}" alt="Torrador de Café"
                                     class="nav-icon" style="width: 1.25em; height: 1.25em; object-fit: contain;">
                                 <p>Torradores</p>
@@ -29,14 +30,14 @@
                         </li>
 
                         <li class="nav-item">
-                            <a href="{{ route('torradores.adicionar-sensor') }}" class="nav-link">
+                            <a href="{{ route('torradores.adicionar-sensor') }}" class="nav-link ajax-link">
                                 <i class="nav-icon bi bi-plus-circle"></i>
                                 <p>Adicionar Sensor</p>
                             </a>
                         </li>
 
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="#" class="nav-link ajax-link">
                                 <i class="nav-icon bi bi-gear"></i>
                                 <p>Configurar</p>
                             </a>
@@ -53,22 +54,34 @@
                     </a>
                     <ul class="nav nav-treeview ms-3">
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="{{ route('torras.index') }}" class="nav-link ajax-link">
                                 <img src="{{ asset('images/icons/torrador_de_cafe.png') }}" alt="Torrador de Café"
                                     class="nav-icon" style="width: 1.25em; height: 1.25em; object-fit: contain;">
-                                <p>Torras</p>
+                                <p>Minhas Torras</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('torras.iniciar') }}" class="nav-link">
+                            <a href="{{ route('torras.iniciar') }}" class="nav-link ajax-link">
                                 <i class="nav-icon bi bi-plus-circle"></i>
-                                <p>Iniciar Torra</p>
+                                <p>Configurar Torra</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon bi bi-gear"></i>
+                            <a href="{{ route('torras.monitoramento') }}" class="nav-link">
+                                <i class="nav-icon bi bi-bar-chart-line"></i>
+                                <p>Monitoramento</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('prova.solicitar') }}" class="nav-link ajax-link">
+                                <i class="nav-icon bi bi-file-earmark-text"></i>
                                 <p>Solicitar Prova</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('prova.listar') }}" class="nav-link ajax-link">
+                                <i class="nav-icon bi bi-list-check"></i>
+                                <p>Listar Solicitações</p>
                             </a>
                         </li>
                     </ul>
@@ -76,7 +89,7 @@
 
                 <!--Usuario-->
                 <li class="nav-item">
-                    <a href="../generate/theme.html" class="nav-link">
+                    <a href="{{ route('perfil') }}" class="nav-link ajax-link">
                         <i class="nav-icon bi bi-person-circle"></i>
                         <p>Perfil</p>
                     </a>

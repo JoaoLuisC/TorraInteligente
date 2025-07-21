@@ -1,6 +1,7 @@
 @extends('master')
 
 @section('title', 'Adicionar Torradores')
+@section('breadcrumb-title', 'Adicionar Sensor')
 
 @section('MainContent')
 <div class="container d-flex justify-content-center">

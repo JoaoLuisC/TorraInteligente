@@ -1,7 +1,8 @@
 {{-- resources/views/home.blade.php --}}
 @extends('master')
 
-@section('title', 'Página Inicial')
+@section('title', 'Dashboard - Michelangelo')
+@section('breadcrumb-title', 'Dashboard')
 
 @section('MainContent')
 <div class="container">

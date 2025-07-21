@@ -45,6 +45,21 @@ CREATE TABLE IF NOT EXISTS torras (
     CONSTRAINT fk_torras_avaliador FOREIGN KEY (avaliador_id) REFERENCES usuarios(id)
 );
 
+-- Create solicitacoes_prova table
+CREATE TABLE IF NOT EXISTS solicitacoes_prova (
+    id SERIAL PRIMARY KEY,
+    solicitante_id INTEGER NOT NULL,
+    analista_id INTEGER NOT NULL,
+    torra_id INTEGER NOT NULL,
+    notas TEXT,
+    status VARCHAR(20) CHECK (status IN ('Pendente', 'Em Análise', 'Concluída', 'Cancelada')) DEFAULT 'Pendente',
+    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    atualizado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_solicitacoes_solicitante FOREIGN KEY (solicitante_id) REFERENCES usuarios(id),
+    CONSTRAINT fk_solicitacoes_analista FOREIGN KEY (analista_id) REFERENCES usuarios(id),
+    CONSTRAINT fk_solicitacoes_torra FOREIGN KEY (torra_id) REFERENCES torras(id)
+);
+
 -- Create analise_sensorial table
 CREATE TABLE IF NOT EXISTS analise_sensorial (
     id SERIAL PRIMARY KEY,
@@ -68,10 +83,3 @@ CREATE TABLE IF NOT EXISTS analise_sensorial (
     criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_analise_torra FOREIGN KEY (torra_id) REFERENCES torras(id)
 );
-
--- Insert sample data (same as MySQL version)
-INSERT INTO usuarios (nome, sobrenome, tipo, email, senha, criado_em) VALUES
-    ('joao', 'cardoso', 'Administrador', 'carlos@gmail', '$2y$12$RRpMC9JaT7sxlFNDhSA5leNd7FQlIsrbWvo.B51eDnmm9AJdj1XLy', '2025-06-17 12:18:33'),
-    ('joao', 'cardoso', 'Analista', 'dunthone2016@gmail.com', '$2y$12$G7ep4iMybO23V15SDG4//.xDLdKdZnwA1PzE/fvTFqXl0uJpeUIeG', '2025-06-17 12:27:26'),
-    ('carlos', 'guedes', 'Analista', 'carlao@gmail.com', '$2y$12$tstUPTb2klBxjrpt1lKYF.lW2LwV86PonBdU7jvySbpFuyLrJYf8a', '2025-06-17 23:53:10')
-ON CONFLICT (email) DO NOTHING;

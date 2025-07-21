@@ -15,17 +15,74 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jsvectormap@1.5.3/dist/css/jsvectormap.min.css" integrity="sha256-+uGLJmmTKOqBr+2E6KDYs/NRsHxSkONXFHUL0fy2O/4=" crossorigin="anonymous" />
     <link rel="stylesheet" href="{{ asset('css/Admin_Lte/adminlte.css') }}"/>
     @vite('resources/css/footer.css')
-    
-    @stack('styles')
+
+    <style>
+        .sidebar-brand .brand-link {
+            color: white !important;
+            text-decoration: none !important;
+        }
+
+        .sidebar-brand .brand-link:hover {
+            color: #f8f9fa !important;
+            text-decoration: none !important;
+        }
+
+        .sidebar-brand h2 {
+            color: white !important;
+            font-weight: bold;
+            margin: 0;
+            padding: 0.5rem 0;
+        }
+
+        .nav-link.active {
+            background-color: rgba(255, 255, 255, 0.1) !important;
+            color: white !important;
+        }
+
+        .nav-treeview .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.05) !important;
+        }
+
+        .nav-arrow {
+            transition: transform 0.3s ease;
+        }
+
+        .nav-item.menu-open .nav-arrow {
+            transform: rotate(90deg);
+        }
+
+        /* Estilos para imagens de perfil */
+        .profile-user-img, .user-image {
+            border: 3px solid #fff;
+            border-radius: 50% !important;
+            object-fit: cover;
+        }
+
+        .img-circle {
+            border-radius: 50% !important;
+            object-fit: cover;
+        }
+
+        /* Estilo para preview de imagem */
+        #preview-imagem {
+            border: 3px solid #dee2e6;
+            border-radius: 50% !important;
+            object-fit: cover;
+        }
+
+        /* Responsividade para imagens do perfil */
+        @media (max-width: 768px) {
+            .profile-user-img {
+                width: 80px !important;
+                height: 80px !important;
+            }
+        }
+    </style>    @stack('styles')
 </head>
 <body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
     <!--begin::App Wrapper-->
     <div class="app-wrapper">
 
-        <!-- Navbar -->
-        @include('templates.navbar')
-
-        <!-- Navbar -->
         @include('templates.sidebar')
 
         <!--Conteudo Principal-->
@@ -37,8 +94,50 @@
                     <div class="row">
                         <div class="col-sm-12">
                             <ol class="breadcrumb float-sm-end">
-                                <li class="breadcrumb-item"><a href="#">Home</a></li>
-                                <li class="breadcrumb-item active" aria-current="page">nome da pagina (atual)</li>
+                                <li class="breadcrumb-item">
+                                    <a href="{{ route('dashboard') }}" class="ajax-link">
+                                        <i class="bi bi-house-door me-1"></i>Home
+                                    </a>
+                                </li>
+                                @if(request()->routeIs('dashboard'))
+                                    <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
+                                @elseif(request()->routeIs('perfil'))
+                                    <li class="breadcrumb-item active" aria-current="page">Perfil</li>
+                                @elseif(request()->routeIs('perfil.edit'))
+                                    <li class="breadcrumb-item">
+                                        <a href="{{ route('perfil') }}" class="ajax-link">Perfil</a>
+                                    </li>
+                                    <li class="breadcrumb-item active" aria-current="page">Editar Perfil</li>
+                                @elseif(request()->routeIs('perfil.alterar-senha'))
+                                    <li class="breadcrumb-item">
+                                        <a href="{{ route('perfil') }}" class="ajax-link">Perfil</a>
+                                    </li>
+                                    <li class="breadcrumb-item active" aria-current="page">Alterar Senha</li>
+                                @elseif(request()->routeIs('torradores.*'))
+                                    <li class="breadcrumb-item">
+                                        <a href="{{ route('torradores.index') }}" class="ajax-link">Torradores</a>
+                                    </li>
+                                    @if(request()->routeIs('torradores.index'))
+                                        <li class="breadcrumb-item active" aria-current="page">Lista de Torradores</li>
+                                    @elseif(request()->routeIs('torradores.adicionar-sensor'))
+                                        <li class="breadcrumb-item active" aria-current="page">Adicionar Sensor</li>
+                                    @elseif(request()->routeIs('torradores.edit'))
+                                        <li class="breadcrumb-item active" aria-current="page">Editar Torrador</li>
+                                    @elseif(request()->routeIs('torradores.show'))
+                                        <li class="breadcrumb-item active" aria-current="page">Detalhes do Torrador</li>
+                                    @endif
+                                @elseif(request()->routeIs('torras.*'))
+                                    <li class="breadcrumb-item">
+                                        <a href="{{ route('torras.iniciar') }}" class="ajax-link">Torras</a>
+                                    </li>
+                                    @if(request()->routeIs('torras.iniciar'))
+                                        <li class="breadcrumb-item active" aria-current="page">Iniciar Torra</li>
+                                    @endif
+                                @else
+                                    <li class="breadcrumb-item active" aria-current="page">
+                                        @yield('breadcrumb-title', 'Página Atual')
+                                    </li>
+                                @endif
                             </ol>
                         </div>
                     </div>
@@ -120,11 +219,17 @@
         });
     </script>
     <script>
-        $(document).on('click', '.sidebar-wrapper a', function(e) {
+        $(document).on('click', '.ajax-link', function(e) {
             var href = $(this).attr('href');
             // Só faz AJAX se for um link interno e diferente de '#'
-            if (href && href !== '#' && !href.startsWith('http')) {
+            if (href && href !== '#' && !href.startsWith('http') && !href.startsWith('mailto')) {
                 e.preventDefault();
+
+                // Remove classe active de todos os links
+                $('.sidebar-wrapper .nav-link').removeClass('active');
+                // Adiciona classe active no link clicado
+                $(this).addClass('active');
+
                 // Carrega só o conteúdo principal da página de destino
                 $('main.app-main').load(href + ' main.app-main > *', function(response, status) {
                     if (status === "error") {
@@ -135,6 +240,27 @@
                 window.history.pushState(null, '', href);
             }
         });
+
+        // Para o título MICHELANGELO
+        $(document).on('click', '.brand-link', function(e) {
+            var href = $(this).attr('href');
+            if (href && href !== '#' && !href.startsWith('http')) {
+                e.preventDefault();
+
+                // Remove classe active de todos os links
+                $('.sidebar-wrapper .nav-link').removeClass('active');
+
+                // Carrega o dashboard
+                $('main.app-main').load(href + ' main.app-main > *', function(response, status) {
+                    if (status === "error") {
+                        $('main.app-main').html('<div class="alert alert-danger">Erro ao carregar conteúdo.</div>');
+                    }
+                });
+                // Atualiza a URL no navegador
+                window.history.pushState(null, '', href);
+            }
+        });
+
         // Suporte ao botão voltar/avançar do navegador
         window.onpopstate = function() {
             var href = location.pathname;

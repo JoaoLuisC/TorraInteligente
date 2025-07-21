@@ -42,7 +42,6 @@
                                     <th>Variedade</th>
                                     <th>Densidade</th>
                                     <th>Fermentação</th>
-                                    <th>Finalidade</th>
                                     <th>Status</th>
                                     <th>Criada em</th>
                                     <th>Ações</th>
@@ -60,9 +59,8 @@
                                         {{ $torra->nome }}
                                     </td>
                                     <td>{{ $torra->variedade }}</td>
-                                    <td>{{ number_format($torra->densidade, 2) }} g/cm³</td>
-                                    <td>{{ $torra->fermentacao }}</td>
-                                    <td>{{ $torra->finalidade }}</td>
+                                    <td>{{ $torra->densidade ? $torra->densidade . ' g/cm³' : 'Não informado' }}</td>
+                                    <td>{{ $torra->fermentacao ?? 'Não informado' }}</td>
                                     <td>
                                         @if($torra->avaliada)
                                             <span class="badge bg-success">
@@ -285,7 +283,7 @@ $(document).ready(function() {
         const torraId = $(this).data('id');
         const torraNome = $(this).data('nome');
 
-        $('#nometorraExcluir').text(torraNome);
+        $('#nomeeTorraExcluir').text(torraNome);
         $('#formExcluirTorra').attr('action', '/torras/' + torraId);
         $('#modalExcluirTorra').modal('show');
     });

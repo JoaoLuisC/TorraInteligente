@@ -1,0 +1,127 @@
+@section('scripts')
+<script>
+console.log('=== SCRIPT SIMPLIFICADO ===');
+
+// Aguardar DOM carregar
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM carregado!');
+
+    // Preview de imagem
+    const imagemInput = document.getElementById('imagem');
+    if (imagemInput) {
+        imagemInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                console.log('Arquivo selecionado:', file.name);
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const previewImg = document.getElementById('preview-imagem');
+                    const previewIcon = document.getElementById('preview-icon');
+
+                    if (previewImg) {
+                        previewImg.src = e.target.result;
+                    } else if (previewIcon) {
+                        previewIcon.outerHTML = `<img id="preview-imagem" class="img-fluid img-circle mb-3"
+                                                        src="${e.target.result}"
+                                                        alt="Preview da foto"
+                                                        style="width: 120px; height: 120px; object-fit: cover;">`;
+                    }
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+
+    // Interceptar formulário principal
+    const form = document.getElementById('formEditarPerfil');
+
+    if (form) {
+        console.log('Formulário encontrado, interceptando...');
+
+        form.onsubmit = function(e) {
+            console.log('=== SUBMIT INTERCEPTADO ===');
+            e.preventDefault(); // SEMPRE prevenir
+
+            const submitBtn = this.querySelector('button[type="submit"]');
+
+            // Verificar se há sidebar (modo AJAX)
+            const temSidebar = document.querySelector('.sidebar, .main-sidebar, [class*="sidebar"]') !== null;
+
+            if (temSidebar) {
+                console.log('Modo AJAX - enviando via fetch');
+
+                // Feedback visual
+                if (submitBtn) {
+                    submitBtn.disabled = true;
+                    submitBtn.innerHTML = '<i class="bi bi-hourglass-split"></i> Salvando...';
+                }
+
+                // FormData
+                const formData = new FormData(this);
+                console.log('Enviando dados via AJAX...');
+
+                // Fetch
+                fetch(this.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'application/json'
+                    }
+                })
+                .then(response => {
+                    console.log('Response:', response.status);
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Data:', data);
+
+                    // Reabilitar botão
+                    if (submitBtn) {
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = '<i class="bi bi-check-lg"></i> Salvar Alterações';
+                    }
+
+                    if (data.success) {
+                        alert(data.message);
+
+                        // Redirecionar
+                        const perfilLink = document.querySelector('a[href*="/perfil"]:not([href*="editar"])');
+                        if (perfilLink) {
+                            perfilLink.click();
+                        } else {
+                            window.location.href = data.redirect;
+                        }
+                    } else {
+                        alert('Erro: ' + (data.message || 'Erro desconhecido'));
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro:', error);
+
+                    if (submitBtn) {
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = '<i class="bi bi-check-lg"></i> Salvar Alterações';
+                    }
+
+                    alert('Erro ao salvar: ' + error.message);
+                });
+
+            } else {
+                console.log('Modo tradicional - enviando formulário');
+                this.submit();
+            }
+
+            return false;
+        };
+
+        console.log('Event handler configurado!');
+    } else {
+        console.error('Formulário não encontrado!');
+    }
+});
+
+console.log('=== SCRIPT FINALIZADO ===');
+</script>
+@endsection

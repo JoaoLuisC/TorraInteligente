@@ -21,6 +21,7 @@ class User extends Authenticatable
         'email',
         'senha',
         'tipo',
+        'imagem',
     ];
 
     // Esconde o campo senha na serialização
