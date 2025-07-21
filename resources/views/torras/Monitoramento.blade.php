@@ -402,12 +402,12 @@
         cardsDados.forEach(item => {
             const cardElement = document.getElementById(item.card);
             const valueElement = document.getElementById(item.value);
-            
+
             if (cardElement) {
                 cardElement.className = cardElement.className.replace('opacity-50', '');
                 cardElement.querySelector('p').className = cardElement.querySelector('p').className.replace('text-muted', '');
             }
-            
+
             if (valueElement) {
                 valueElement.className = item.color;
             }
@@ -418,11 +418,11 @@
         if (cardGrafico) {
             cardGrafico.className = cardGrafico.className.replace('opacity-50', '');
             cardGrafico.querySelector('h5').className = '';
-            
+
             // Esconder mensagem de aguardando e mostrar canvas
             const aguardandoMsg = cardGrafico.querySelector('.text-center.text-muted');
             const canvas = document.getElementById('temperatura-chart');
-            
+
             if (aguardandoMsg) aguardandoMsg.style.display = 'none';
             if (canvas) canvas.style.display = 'block';
         }
@@ -439,7 +439,7 @@
         if (cardLogs) {
             cardLogs.className = cardLogs.className.replace('opacity-50', '');
             cardLogs.querySelector('h5').className = '';
-            
+
             // Limpar mensagem de aguardando
             const logsContainer = document.getElementById('logs-eventos');
             if (logsContainer) {
@@ -520,7 +520,7 @@
             { id: 'btn-pausar', classe: 'btn btn-outline-secondary mx-1' },
             { id: 'btn-finalizar', classe: 'btn btn-danger mx-1' }
         ];
-        
+
         controles.forEach(controle => {
             const elemento = document.getElementById(controle.id);
             if (elemento) {
@@ -559,7 +559,7 @@
 
         // Definir valores iniciais
         temperaturaAtual = 25;
-        
+
         // Atualizar displays iniciais
         atualizarDisplay('temperatura-atual', '25°C');
         atualizarDisplay('tempo-torra', '00:00');
