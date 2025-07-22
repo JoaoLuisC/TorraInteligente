@@ -13,41 +13,52 @@ class InitialDataSeeder extends Seeder
      */
     public function run(): void
     {
-        // Criar usuário administrador
-        DB::table('usuarios')->insert([
-            'nome' => 'Admin',
-            'sobrenome' => 'Sistema',
-            'tipo' => 'Administrador',
-            'email' => 'admin@torrainteligente.com',
-            'senha' => Hash::make('admin123'),
-            'criado_em' => now(),
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
+        // Verificar se os usuários já existem antes de criar
+        $usuarios = [
+            [
+                'nome' => 'Admin',
+                'sobrenome' => 'Sistema',
+                'tipo' => 'Administrador',
+                'email' => 'admin@torrainteligente.com',
+                'senha' => Hash::make('admin123'),
+            ],
+            [
+                'nome' => 'João',
+                'sobrenome' => 'Analista',
+                'tipo' => 'Analista',
+                'email' => 'analista@torrainteligente.com',
+                'senha' => Hash::make('analista123'),
+            ],
+            [
+                'nome' => 'Maria',
+                'sobrenome' => 'Produtora',
+                'tipo' => 'Produtor',
+                'email' => 'produtor@torrainteligente.com',
+                'senha' => Hash::make('produtor123'),
+            ]
+        ];
 
-        // Criar um analista de exemplo
-        DB::table('usuarios')->insert([
-            'nome' => 'João',
-            'sobrenome' => 'Analista',
-            'tipo' => 'Analista',
-            'email' => 'analista@torrainteligente.com',
-            'senha' => Hash::make('analista123'),
-            'criado_em' => now(),
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
-
-        // Criar um produtor de exemplo
-        DB::table('usuarios')->insert([
-            'nome' => 'Maria',
-            'sobrenome' => 'Produtora',
-            'tipo' => 'Produtor',
-            'email' => 'produtor@torrainteligente.com',
-            'senha' => Hash::make('produtor123'),
-            'criado_em' => now(),
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
+        foreach ($usuarios as $usuario) {
+            // Verificar se o usuário já existe
+            $existe = DB::table('usuarios')->where('email', $usuario['email'])->first();
+            
+            if (!$existe) {
+                DB::table('usuarios')->insert([
+                    'nome' => $usuario['nome'],
+                    'sobrenome' => $usuario['sobrenome'],
+                    'tipo' => $usuario['tipo'],
+                    'email' => $usuario['email'],
+                    'senha' => $usuario['senha'],
+                    'criado_em' => now(),
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+                
+                echo "✅ Usuário {$usuario['tipo']} criado: {$usuario['email']}\n";
+            } else {
+                echo "ℹ️  Usuário {$usuario['tipo']} já existe: {$usuario['email']}\n";
+            }
+        }
 
         $this->command->info('✅ Dados iniciais criados com sucesso!');
         $this->command->info('👤 Admin: admin@torrainteligente.com / admin123');

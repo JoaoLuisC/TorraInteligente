@@ -30,12 +30,12 @@ class User extends Authenticatable
         'remember_token',
     ];
 
-    // Ativa os timestamps padrão do Laravel, mas só criado_em
+    // Ativa os timestamps padrão do Laravel
     public $timestamps = true;
 
-    // Define qual campo de timestamp usar
-    const CREATED_AT = 'criado_em';
-    const UPDATED_AT = null; // Desabilita updated_at
+    // Define quais campos de timestamp usar - usar os padrões do Laravel
+    const CREATED_AT = 'created_at';
+    const UPDATED_AT = 'updated_at';
 
     // Define o campo de senha para autenticação
     public function getAuthPassword()

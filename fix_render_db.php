@@ -50,9 +50,11 @@ CREATE TABLE IF NOT EXISTS solicitacoes_prova (
     analista_id INTEGER,
     torra_id INTEGER NOT NULL,
     notas TEXT,
-    status VARCHAR(20) CHECK (status IN ('pendente', 'em_andamento', 'concluida', 'cancelada')) DEFAULT 'pendente',
+    status VARCHAR(20) CHECK (status IN ('Pendente', 'Em Análise', 'Concluída', 'Cancelada')) DEFAULT 'Pendente',
     criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     atualizado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_solicitacoes_solicitante FOREIGN KEY (solicitante_id) REFERENCES usuarios(id) ON DELETE CASCADE,
     CONSTRAINT fk_solicitacoes_analista FOREIGN KEY (analista_id) REFERENCES usuarios(id) ON DELETE SET NULL,
     CONSTRAINT fk_solicitacoes_torra FOREIGN KEY (torra_id) REFERENCES torras(id) ON DELETE CASCADE
@@ -78,6 +80,8 @@ CREATE TABLE IF NOT EXISTS analise_sensorial (
     balanceamento DECIMAL(3,1) CHECK (balanceamento BETWEEN 0 AND 10),
     nota_final DECIMAL(5,2),
     criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_analise_solicitacao FOREIGN KEY (solicitacao_id) REFERENCES solicitacoes_prova(id) ON DELETE CASCADE
 );
 ";
@@ -91,9 +95,28 @@ executeSQL("ALTER TABLE usuarios ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP D
 echo "\n7. Adicionando colunas faltantes na tabela torras...\n";
 executeSQL("ALTER TABLE torras ADD COLUMN IF NOT EXISTS avaliador_id INTEGER", "Coluna avaliador_id adicionada");
 executeSQL("ALTER TABLE torras ADD COLUMN IF NOT EXISTS avaliada_em TIMESTAMP", "Coluna avaliada_em adicionada");
+executeSQL("ALTER TABLE torras ADD COLUMN IF NOT EXISTS created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP", "Coluna created_at adicionada na tabela torras");
+executeSQL("ALTER TABLE torras ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP", "Coluna updated_at adicionada na tabela torras");
 
 echo "\n8. Criando foreign key constraints se não existirem...\n";
-executeSQL("ALTER TABLE torras ADD CONSTRAINT IF NOT EXISTS fk_torras_avaliador FOREIGN KEY (avaliador_id) REFERENCES usuarios(id) ON DELETE SET NULL", "Foreign key torras->avaliador criada");
+// PostgreSQL não suporta IF NOT EXISTS para constraints, então vamos verificar manualmente
+try {
+    $constraintExists = DB::select("
+        SELECT constraint_name 
+        FROM information_schema.table_constraints 
+        WHERE table_name = 'torras' 
+        AND constraint_name = 'fk_torras_avaliador'
+        AND constraint_type = 'FOREIGN KEY'
+    ");
+    
+    if (empty($constraintExists)) {
+        executeSQL("ALTER TABLE torras ADD CONSTRAINT fk_torras_avaliador FOREIGN KEY (avaliador_id) REFERENCES usuarios(id) ON DELETE SET NULL", "Foreign key torras->avaliador criada");
+    } else {
+        echo "✅ Foreign key torras->avaliador já existe\n";
+    }
+} catch (Exception $e) {
+    echo "⚠️  Erro verificando foreign key: " . $e->getMessage() . "\n";
+}
 
 echo "\n9. LIMPANDO TODOS OS DADOS PARA COMEÇAR DO ZERO...\n";
 executeSQL("DELETE FROM analise_sensorial", "Dados de análise sensorial removidos");
@@ -110,12 +133,23 @@ executeSQL("ALTER SEQUENCE solicitacoes_prova_id_seq RESTART WITH 1", "Sequênci
 executeSQL("ALTER SEQUENCE analise_sensorial_id_seq RESTART WITH 1", "Sequência analise_sensorial resetada");
 
 echo "\n11. Criando usuário administrador padrão...\n";
-$senhaHash = password_hash('admin123', PASSWORD_DEFAULT);
-$sqlAdmin = "
-INSERT INTO usuarios (nome, sobrenome, tipo, email, senha, criado_em, created_at, updated_at)
-VALUES ('Admin', 'Sistema', 'Administrador', 'admin@torrainteligente.com', '$senhaHash', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
-";
-executeSQL($sqlAdmin, "Usuário administrador criado (admin@torrainteligente.com / admin123)");
+// Verificar se o usuário admin já existe
+try {
+    $adminExists = DB::select("SELECT id FROM usuarios WHERE email = 'admin@torrainteligente.com' LIMIT 1");
+    
+    if (empty($adminExists)) {
+        $senhaHash = password_hash('admin123', PASSWORD_DEFAULT);
+        $sqlAdmin = "
+        INSERT INTO usuarios (nome, sobrenome, tipo, email, senha, criado_em, created_at, updated_at)
+        VALUES ('Admin', 'Sistema', 'Administrador', 'admin@torrainteligente.com', '$senhaHash', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+        ";
+        executeSQL($sqlAdmin, "Usuário administrador criado (admin@torrainteligente.com / admin123)");
+    } else {
+        echo "✅ Usuário administrador já existe\n";
+    }
+} catch (Exception $e) {
+    echo "⚠️  Erro criando usuário admin: " . $e->getMessage() . "\n";
+}
 
 echo "\n=== CORREÇÃO CONCLUÍDA ===\n";
 echo "✅ Banco de dados corrigido e limpo\n";
