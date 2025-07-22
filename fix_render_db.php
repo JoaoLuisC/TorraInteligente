@@ -87,6 +87,9 @@ CREATE TABLE IF NOT EXISTS analise_sensorial (
 ";
 executeSQL($sqlAnalise, "Tabela analise_sensorial criada");
 
+// Adicionar a coluna solicitacao_id se ela não existir (caso a tabela já existisse)
+executeSQL("ALTER TABLE analise_sensorial ADD COLUMN IF NOT EXISTS solicitacao_id INTEGER", "Coluna solicitacao_id adicionada se necessário");
+
 echo "\n6. Adicionando colunas de compatibilidade com Laravel...\n";
 executeSQL("ALTER TABLE usuarios ADD COLUMN IF NOT EXISTS email_verified_at TIMESTAMP", "Coluna email_verified_at adicionada");
 executeSQL("ALTER TABLE usuarios ADD COLUMN IF NOT EXISTS created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP", "Coluna created_at adicionada");

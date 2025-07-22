@@ -51,7 +51,7 @@ class AdminController extends Controller
             ];
 
             // Usuários recentes (últimos 5)
-            $usuariosRecentes = User::orderBy('created_at', 'desc')->limit(5)->get();
+            $usuariosRecentes = User::orderBy('criado_em', 'desc')->limit(5)->get();
 
             // Análises recentes (últimas 5) - só se as tabelas existirem
             $analisesRecentes = collect();
@@ -70,7 +70,7 @@ class AdminController extends Controller
                             'analista.nome as analista_nome',
                             'analista.sobrenome as analista_sobrenome'
                         )
-                        ->orderBy('a.created_at', 'desc')
+                        ->orderBy('a.criado_em', 'desc')
                         ->limit(5)
                         ->get();
                 } catch (\Exception $e) {
@@ -96,7 +96,7 @@ class AdminController extends Controller
                 'analistas' => User::where('tipo', 'Analista')->count(),
                 'administradores' => User::where('tipo', 'Administrador')->count(),
             ];
-            $usuariosRecentes = User::orderBy('created_at', 'desc')->limit(5)->get();
+            $usuariosRecentes = User::orderBy('criado_em', 'desc')->limit(5)->get();
             $analisesRecentes = collect();
             $distribuicaoUsuarios = collect();
         }

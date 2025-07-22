@@ -41,6 +41,8 @@ CREATE TABLE IF NOT EXISTS torras (
     avaliador_id INTEGER DEFAULT NULL,
     avaliada_em TIMESTAMP DEFAULT NULL,
     criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_torras_usuario FOREIGN KEY (usuario_id) REFERENCES usuarios(id),
     CONSTRAINT fk_torras_avaliador FOREIGN KEY (avaliador_id) REFERENCES usuarios(id)
 );
@@ -81,6 +83,8 @@ CREATE TABLE IF NOT EXISTS analise_sensorial (
         equilibrio + docura + uniformidade + defeitos + balanceamento
     ) STORED,
     criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_analise_solicitacao FOREIGN KEY (solicitacao_id) REFERENCES solicitacoes_prova(id)
 );
 
