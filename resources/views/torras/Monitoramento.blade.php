@@ -26,7 +26,7 @@
                 <div class="card-body">
                     @if($torras->count() > 0)
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <label for="select-torra" class="form-label">Escolha uma torra não avaliada:</label>
                                 <select class="form-control" id="select-torra">
                                     <option value="">Selecione uma torra...</option>
@@ -43,8 +43,21 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="col-md-6 d-flex align-items-end">
-                                <button type="button" class="btn btn-success btn-lg" id="btn-iniciar-monitoramento">
+                            <div class="col-md-4">
+                                <label for="select-torrador" class="form-label">Selecione o torrador:</label>
+                                <select class="form-control" id="select-torrador">
+                                    <option value="">Selecione um torrador...</option>
+                                    @foreach($torradores as $torrador)
+                                        <option value="{{ $torrador->id }}"
+                                                data-nome="{{ $torrador->nome }}"
+                                                data-codigo="{{ $torrador->codigo_conexao }}">
+                                            {{ $torrador->nome }} ({{ $torrador->codigo_conexao }})
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-4 d-flex align-items-end">
+                                <button type="button" class="btn btn-success btn-lg" id="btn-iniciar-monitoramento" disabled>
                                     <i class="fas fa-play me-2"></i>
                                     Iniciar Monitoramento
                                 </button>
@@ -225,27 +238,39 @@
         console.log('Inicializando sistema...');
 
         const selectTorra = document.getElementById('select-torra');
+        const selectTorrador = document.getElementById('select-torrador');
         const btnIniciarMonitoramento = document.getElementById('btn-iniciar-monitoramento');
 
         console.log('Elementos encontrados:', {
             selectTorra: selectTorra,
+            selectTorrador: selectTorrador,
             btnIniciarMonitoramento: btnIniciarMonitoramento
         });
 
-        if (!selectTorra || !btnIniciarMonitoramento) {
+        if (!selectTorra || !selectTorrador || !btnIniciarMonitoramento) {
             console.error('Elementos críticos não encontrados!');
             return;
         }
 
-        // Event listener para seleção de torra
-        selectTorra.onchange = function() {
-            console.log('Mudança detectada no select:', this.value);
+        // Função para verificar se ambos os campos estão preenchidos
+        function verificarSelecoes() {
+            const torraSelecionada = selectTorra.value && selectTorra.value !== '';
+            const torradorSelecionado = selectTorrador.value && selectTorrador.value !== '';
 
-            if (this.value && this.value !== '') {
-                console.log('Habilitando botão...');
+            if (torraSelecionada && torradorSelecionado) {
                 btnIniciarMonitoramento.disabled = false;
                 btnIniciarMonitoramento.style.opacity = '1';
+            } else {
+                btnIniciarMonitoramento.disabled = true;
+                btnIniciarMonitoramento.style.opacity = '0.6';
+            }
+        }
 
+        // Event listeners para ambos os selects
+        selectTorra.onchange = function() {
+            console.log('Mudança detectada no select torra:', this.value);
+
+            if (this.value && this.value !== '') {
                 // Pegar dados da opção selecionada
                 const opcaoSelecionada = this.options[this.selectedIndex];
                 console.log('Opção selecionada:', opcaoSelecionada);
@@ -255,11 +280,18 @@
 
                 torraSelecionada = this.value;
                 console.log('Torra selecionada salva:', torraSelecionada);
-            } else {
-                console.log('Nenhuma torra selecionada...');
-                // Não vamos desabilitar o botão para teste
-                // btnIniciarMonitoramento.disabled = true;
-                // btnIniciarMonitoramento.style.opacity = '0.6';
+            }
+
+            verificarSelecoes();
+        };
+
+        selectTorrador.onchange = function() {
+            console.log('Mudança detectada no select torrador:', this.value);
+            verificarSelecoes();
+        };
+
+        // Inicializar estado do botão
+        verificarSelecoes();
                 torraSelecionada = null;
 
                 // Esconder informações

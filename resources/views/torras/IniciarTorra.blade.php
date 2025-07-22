@@ -66,11 +66,6 @@
                                         <option value="">Selecione a variedade</option>
                                         <option value="Arábico" {{ old('variedade') == 'Arábico' ? 'selected' : '' }}>Arábico</option>
                                         <option value="Bourbon" {{ old('variedade') == 'Bourbon' ? 'selected' : '' }}>Bourbon</option>
-                                        <option value="Catuaí" {{ old('variedade') == 'Catuaí' ? 'selected' : '' }}>Catuaí</option>
-                                        <option value="Mundo Novo" {{ old('variedade') == 'Mundo Novo' ? 'selected' : '' }}>Mundo Novo</option>
-                                        <option value="Typica" {{ old('variedade') == 'Typica' ? 'selected' : '' }}>Typica</option>
-                                        <option value="Geisha" {{ old('variedade') == 'Geisha' ? 'selected' : '' }}>Geisha</option>
-                                        <option value="Caturra" {{ old('variedade') == 'Caturra' ? 'selected' : '' }}>Caturra</option>
                                     </select>
                                     @error('variedade')
                                         <div class="invalid-feedback">{{ $message }}</div>
@@ -109,21 +104,6 @@
                             </div>
                         </div>
 
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="form-group mb-3">
-                                    <label for="observacoes" class="form-label">Observações</label>
-                                    <textarea class="form-control @error('observacoes') is-invalid @enderror"
-                                              id="observacoes" name="observacoes" rows="3" maxlength="500"
-                                              placeholder="Informações adicionais sobre esta torra...">{{ old('observacoes') }}</textarea>
-                                    @error('observacoes')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                    <div class="form-text">Máximo 500 caracteres</div>
-                                </div>
-                            </div>
-                        </div>
-
                         <div class="card-footer bg-white border-0 px-0">
                             <button type="submit" class="btn btn-primary btn-lg" id="btn-configurar-torra">
                                 <i class="fas fa-save me-2"></i>
@@ -135,24 +115,6 @@
                             </a>
                         </div>
                     </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Card informativo -->
-    <div class="row mt-4">
-        <div class="col-12">
-            <div class="card border-info">
-                <div class="card-body">
-                    <h5 class="card-title text-info">
-                        <i class="fas fa-info-circle me-2"></i>
-                        Próximo Passo
-                    </h5>
-                    <p class="card-text">
-                        Após configurar sua torra, você será redirecionado para a tela de
-                        <strong>Monitoramento</strong> onde poderá iniciar o processo de torra em tempo real.
-                    </p>
                 </div>
             </div>
         </div>

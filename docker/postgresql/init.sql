@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS torras (
     densidade FLOAT NOT NULL,
     fermentacao VARCHAR(20) CHECK (fermentacao IN ('Natural', 'Fermentado', 'CD')) NOT NULL,
     finalidade VARCHAR(20) CHECK (finalidade IN ('Espresso', 'Filtro', 'Amostra')) NOT NULL,
-    avaliada BOOLEAN DEFAULT FALSE,
+    status VARCHAR(30) CHECK (status IN ('nao_avaliada', 'aguardando_avaliacao', 'avaliada')) DEFAULT 'nao_avaliada',
     avaliador_id INTEGER DEFAULT NULL,
     avaliada_em TIMESTAMP DEFAULT NULL,
     criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -63,7 +63,7 @@ CREATE TABLE IF NOT EXISTS solicitacoes_prova (
 -- Create analise_sensorial table
 CREATE TABLE IF NOT EXISTS analise_sensorial (
     id SERIAL PRIMARY KEY,
-    torra_id INTEGER NOT NULL,
+    solicitacao_id INTEGER NOT NULL,
     aroma_po DECIMAL(3,1) CHECK (aroma_po BETWEEN 0 AND 10),
     fragrancia_cafe DECIMAL(3,1) CHECK (fragrancia_cafe BETWEEN 0 AND 10),
     aroma_final DECIMAL(3,1) GENERATED ALWAYS AS ((aroma_po + fragrancia_cafe) / 2) STORED,
@@ -76,10 +76,15 @@ CREATE TABLE IF NOT EXISTS analise_sensorial (
     uniformidade DECIMAL(3,1) CHECK (uniformidade BETWEEN 0 AND 10),
     defeitos DECIMAL(3,1) CHECK (defeitos BETWEEN 0 AND 10),
     balanceamento DECIMAL(3,1) CHECK (balanceamento BETWEEN 0 AND 10),
-    nota_total DECIMAL(5,2) GENERATED ALWAYS AS (
+    nota_final DECIMAL(5,2) GENERATED ALWAYS AS (
         ((aroma_po + fragrancia_cafe) / 2) + sabor + acidez + corpo + retro_gosto +
         equilibrio + docura + uniformidade + defeitos + balanceamento
     ) STORED,
     criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT fk_analise_torra FOREIGN KEY (torra_id) REFERENCES torras(id)
+    CONSTRAINT fk_analise_solicitacao FOREIGN KEY (solicitacao_id) REFERENCES solicitacoes_prova(id)
 );
+
+-- Add email_verified_at to usuarios table for Laravel compatibility
+ALTER TABLE usuarios ADD COLUMN IF NOT EXISTS email_verified_at TIMESTAMP NULL;
+ALTER TABLE usuarios ADD COLUMN IF NOT EXISTS created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
+ALTER TABLE usuarios ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP;

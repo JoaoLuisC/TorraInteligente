@@ -40,6 +40,81 @@
             position: relative;
             z-index: 2;
         }
+
+        /* Dropdown moderno */
+        .user-dropdown-btn {
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+        }
+
+        .user-dropdown-btn:hover {
+            background-color: rgba(255,255,255,0.1);
+            transform: translateY(-1px);
+        }
+
+        .modern-dropdown {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            padding: 0;
+            margin-top: 0.5rem;
+            min-width: 280px;
+            backdrop-filter: blur(10px);
+            background: rgba(108, 117, 125, 0.95); /* Cinza mais claro */
+        }
+
+        .dropdown-header {
+            background: linear-gradient(135deg, #6c757d, #495057);
+            color: white !important;
+            border-radius: 12px 12px 0 0;
+            padding: 1rem;
+            margin: 0;
+        }
+
+        .dropdown-header * {
+            color: white !important;
+        }
+
+        .dropdown-item-container .dropdown-item {
+            padding: 0.75rem 1rem;
+            transition: all 0.3s ease;
+            border: none;
+            color: white !important;
+        }
+
+        .dropdown-item-container .dropdown-item:hover {
+            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+            color: white !important;
+            transform: translateX(5px);
+        }
+
+        .dropdown-item i {
+            width: 16px;
+            text-align: center;
+            color: white !important;
+        }
+
+        .dropdown-divider {
+            margin: 0.5rem 0;
+            opacity: 0.3;
+            border-color: rgba(255,255,255,0.3);
+        }
+
+        /* Estilo para foto de perfil com borda preta */
+        .profile-img {
+            border: 2px solid #000 !important;
+            width: 32px;
+            height: 32px;
+            object-fit: cover;
+        }
+
+        .profile-img-large {
+            border: 3px solid #000 !important;
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+        }
     </style>
 </head>
 <body>
@@ -63,31 +138,65 @@
                     </li>
                 @else
                     <li class="nav-item dropdown user-menu">
-                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                            <span class="d-none d-md-inline">{{ Auth::user()->name }} {{ Auth::user()->sobrenome }}</span>
+                        <a href="#" class="nav-link dropdown-toggle user-dropdown-btn" data-bs-toggle="dropdown" aria-expanded="false">
+                            <div class="d-flex align-items-center">
+                                @if(Auth::user()->imagem && file_exists(public_path('uploads/perfil/' . Auth::user()->imagem)))
+                                    <img src="{{ asset('uploads/perfil/' . Auth::user()->imagem) }}"
+                                         class="rounded-circle me-2 profile-img" alt="Foto do usuário">
+                                @else
+                                    <i class="bi bi-person-circle me-2" style="font-size: 24px;"></i>
+                                @endif
+                                <span class="d-none d-md-inline fw-medium">{{ Auth::user()->nome }} {{ Auth::user()->sobrenome }}</span>
+                                <i class="fas fa-chevron-down ms-1" style="font-size: 0.8em;"></i>
+                            </div>
                         </a>
-                        <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
-                            <li class="user-header text-bg-primary text-center">
-                                <img src="{{ asset('images/logoMichelangelo.png') }}" class="rounded-circle shadow mb-2"
-                                    alt="User" style="width: 80px; height: 80px;" />
-                                <p>
-                                    {{ Auth::user()->name }} {{ Auth::user()->sobrenome }}
-                                    <small>
-                                        Membro desde
-                                        @if(Auth::user()->criado_em)
-                                            {{ Auth::user()->criado_em->format('Y/m/d') }}
-                                        @else
-                                            Data não disponível
-                                        @endif
-                                    </small>
-                                </p>
+                        <ul class="dropdown-menu dropdown-menu-end modern-dropdown shadow-lg">
+                            <li class="dropdown-header">
+                                <div class="d-flex align-items-center p-2">
+                                    @if(Auth::user()->imagem && file_exists(public_path('uploads/perfil/' . Auth::user()->imagem)))
+                                        <img src="{{ asset('uploads/perfil/' . Auth::user()->imagem) }}"
+                                             class="rounded-circle me-3 profile-img-large" alt="Foto do usuário">
+                                    @else
+                                        <i class="bi bi-person-circle me-3" style="font-size: 50px; color: white;"></i>
+                                    @endif
+                                    <div>
+                                        <div class="fw-bold">{{ Auth::user()->nome }} {{ Auth::user()->sobrenome }}</div>
+                                        <small class="text-white-50">{{ Auth::user()->tipo }}</small>
+                                        <br>
+                                        <small class="text-white-50">
+                                            Membro desde
+                                            @if(Auth::user()->criado_em)
+                                                {{ \Carbon\Carbon::parse(Auth::user()->criado_em)->format('d/m/Y') }}
+                                            @else
+                                                Data não disponível
+                                            @endif
+                                        </small>
+                                    </div>
+                                </div>
                             </li>
-                            <li class="user-footer d-flex justify-content-between">
-                                <a href="#" class="btn btn-default btn-flat">Perfil</a>
-                                <a href="{{ route('dashboard') }}" class="btn btn-default btn-flat">DashBoard</a>
-                                <form action="{{ route('logout') }}" method="POST" class="d-inline">
+                            <li><hr class="dropdown-divider"></li>
+                            <li class="dropdown-item-container">
+                                <a href="{{ route('perfil') }}" class="dropdown-item d-flex align-items-center">
+                                    <i class="fas fa-user me-2"></i>
+                                    <span>Meu Perfil</span>
+                                </a>
+                            </li>
+                            @if(request()->routeIs('home'))
+                                <li class="dropdown-item-container">
+                                    <a href="{{ route('dashboard') }}" class="dropdown-item d-flex align-items-center">
+                                        <i class="fas fa-tachometer-alt me-2"></i>
+                                        <span>Dashboard</span>
+                                    </a>
+                                </li>
+                            @endif
+                            <li><hr class="dropdown-divider"></li>
+                            <li class="dropdown-item-container">
+                                <form action="{{ route('logout') }}" method="POST" class="w-100">
                                     @csrf
-                                    <button type="submit" class="btn btn-default btn-flat">Sair</button>
+                                    <button type="submit" class="dropdown-item d-flex align-items-center w-100 border-0 bg-transparent">
+                                        <i class="fas fa-sign-out-alt me-2"></i>
+                                        <span>Sair</span>
+                                    </button>
                                 </form>
                             </li>
                         </ul>

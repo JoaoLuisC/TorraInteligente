@@ -42,41 +42,81 @@
 
             <!--Usuario Dropdown Menu-->
             <li class="nav-item dropdown user-menu">
-                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-                    @if(Auth::check() && Auth::user()->imagem && file_exists(public_path('uploads/perfil/' . Auth::user()->imagem)))
-                        <img src="{{ asset('uploads/perfil/' . Auth::user()->imagem) }}"
-                             class="user-image rounded-circle shadow" alt="Foto do usuário"
-                             style="width: 25px; height: 25px; object-fit: cover;">
-                    @else
-                        <i class="bi bi-person-circle" style="font-size: 20px;"></i>
-                    @endif
-                    <span class="d-none d-md-inline">
-                        {{ Auth::check() ? (Auth::user()->nome . ' ' . Auth::user()->sobrenome) : 'Usuário' }}
-                    </span>
-                </a>
-                <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
-                    <li class="user-header text-bg-primary">
+                <a href="#" class="nav-link dropdown-toggle user-dropdown-btn" data-bs-toggle="dropdown" aria-expanded="false">
+                    <div class="d-flex align-items-center">
                         @if(Auth::check() && Auth::user()->imagem && file_exists(public_path('uploads/perfil/' . Auth::user()->imagem)))
                             <img src="{{ asset('uploads/perfil/' . Auth::user()->imagem) }}"
-                                 class="rounded-circle shadow" alt="Foto do usuário"
-                                 style="width: 80px; height: 80px; object-fit: cover;">
+                                 class="rounded-circle me-2 profile-img" alt="Foto do usuário">
                         @else
-                            <i class="bi bi-person-circle text-white" style="font-size: 80px;"></i>
+                            <i class="bi bi-person-circle me-2" style="font-size: 24px;"></i>
                         @endif
-                        <p>
+                        <span class="d-none d-md-inline fw-medium">
                             {{ Auth::check() ? (Auth::user()->nome . ' ' . Auth::user()->sobrenome) : 'Usuário' }}
-                            <small>
-                                Membro desde {{ Auth::check() && Auth::user()->criado_em ? \Carbon\Carbon::parse(Auth::user()->criado_em)->format('d/m/Y') : 'Data não disponível' }}
-                            </small>
-                        </p>
+                        </span>
+                        <i class="fas fa-chevron-down ms-1" style="font-size: 0.8em;"></i>
+                    </div>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end modern-dropdown shadow-lg">
+                    <li class="dropdown-header">
+                        <div class="d-flex align-items-center p-2">
+                            @if(Auth::check() && Auth::user()->imagem && file_exists(public_path('uploads/perfil/' . Auth::user()->imagem)))
+                                <img src="{{ asset('uploads/perfil/' . Auth::user()->imagem) }}"
+                                     class="rounded-circle me-3 profile-img-large" alt="Foto do usuário">
+                            @else
+                                <i class="bi bi-person-circle me-3" style="font-size: 50px; color: white;"></i>
+                            @endif
+                            <div>
+                                <div class="fw-bold">
+                                    {{ Auth::check() ? (Auth::user()->nome . ' ' . Auth::user()->sobrenome) : 'Usuário' }}
+                                </div>
+                                <small class="text-white-50">
+                                    {{ Auth::check() ? Auth::user()->tipo : 'Tipo não disponível' }}
+                                </small>
+                                <br>
+                                <small class="text-white-50">
+                                    Membro desde
+                                    @if(Auth::check() && Auth::user()->criado_em)
+                                        {{ \Carbon\Carbon::parse(Auth::user()->criado_em)->format('d/m/Y') }}
+                                    @else
+                                        Data não disponível
+                                    @endif
+                                </small>
+                            </div>
+                        </div>
                     </li>
-                    <li class="user-footer">
-                        <a href="{{ route('perfil') }}" class="btn btn-default btn-flat ajax-link">Perfil</a>
-                        <button type="submit" form="logout-form" class="btn btn-default btn-flat float-end">
-                            Sair
-                        </button>
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                    <li><hr class="dropdown-divider"></li>
+                    <li class="dropdown-item-container">
+                        <a href="{{ route('perfil') }}" class="dropdown-item d-flex align-items-center ajax-link">
+                            <i class="fas fa-user me-2"></i>
+                            <span>Meu Perfil</span>
+                        </a>
+                    </li>
+                    <li class="dropdown-item-container">
+                        <a href="{{ route('dashboard') }}" class="dropdown-item d-flex align-items-center ajax-link">
+                            <i class="fas fa-tachometer-alt me-2"></i>
+                            <span>
+                                @if(Auth::check())
+                                    @if(Auth::user()->tipo === 'Administrador')
+                                        Dashboard Admin
+                                    @elseif(Auth::user()->tipo === 'Analista')
+                                        Dashboard Analista
+                                    @else
+                                        Dashboard
+                                    @endif
+                                @else
+                                    Dashboard
+                                @endif
+                            </span>
+                        </a>
+                    </li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li class="dropdown-item-container">
+                        <form action="{{ route('logout') }}" method="POST" class="w-100">
                             @csrf
+                            <button type="submit" class="dropdown-item d-flex align-items-center w-100 border-0 bg-transparent">
+                                <i class="fas fa-sign-out-alt me-2"></i>
+                                <span>Sair</span>
+                            </button>
                         </form>
                     </li>
                 </ul>

@@ -32,7 +32,6 @@
                                             @endif
                                         </div>
                                         <h3 class="profile-username text-center">{{ Auth::user()->nome ?? 'Nome não informado' }}</h3>
-                                        <p class="text-muted text-center">Usuário do Sistema</p>
                                     </div>
                                 </div>
                             </div>
@@ -106,47 +105,6 @@
                                                 </div>
                                             </div>
                                         </form>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row mt-4">
-                            <div class="col-12">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h3 class="card-title">
-                                            <i class="bi bi-chat-dots me-2"></i>
-                                            Mensagens do Sistema
-                                        </h3>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="timeline">
-                                            <div class="time-label">
-                                                <span class="bg-info">Sistema</span>
-                                            </div>
-                                            <div>
-                                                <i class="bi bi-person-check bg-success"></i>
-                                                <div class="timeline-item">
-                                                    <span class="time"><i class="bi bi-clock"></i> {{ now()->format('H:i') }}</span>
-                                                    <h3 class="timeline-header">Bem-vindo ao Sistema</h3>
-                                                    <div class="timeline-body">
-                                                        Olá {{ Auth::user()->nome }}, seja bem-vindo ao sistema Michelangelo!
-                                                        Você pode gerenciar seus torradores e acompanhar suas torras aqui.
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div>
-                                                <i class="bi bi-info-circle bg-info"></i>
-                                                <div class="timeline-item">
-                                                    <span class="time"><i class="bi bi-clock"></i> Ontem</span>
-                                                    <h3 class="timeline-header">Dica do Sistema</h3>
-                                                    <div class="timeline-body">
-                                                        Lembre-se de manter seus dados atualizados para uma melhor experiência.
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
                                     </div>
                                 </div>
                             </div>

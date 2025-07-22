@@ -18,7 +18,7 @@ class Torra extends Model
         'densidade',
         'fermentacao',
         'finalidade',
-        'avaliada',
+        'status',
         'avaliador_id',
         'avaliada_em',
         'criado_em',

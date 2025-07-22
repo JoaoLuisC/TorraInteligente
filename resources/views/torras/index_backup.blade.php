@@ -37,14 +37,11 @@
                             <div class="col-md-4">
                                 <select name="filtro_avaliacao" class="form-select" onchange="this.form.submit()">
                                     <option value="">📊 Todas as torras</option>
-                                    <option value="nao_avaliadas" {{ request('filtro_avaliacao') === 'nao_avaliadas' ? 'selected' : '' }}>
-                                        ⏳ Não avaliadas
-                                    </option>
-                                    <option value="aguardando_avaliacao" {{ request('filtro_avaliacao') === 'aguardando_avaliacao' ? 'selected' : '' }}>
-                                        🔄 Aguardando avaliação
-                                    </option>
                                     <option value="avaliadas" {{ request('filtro_avaliacao') === 'avaliadas' ? 'selected' : '' }}>
-                                        ✅ Avaliadas
+                                        ✅ Torras avaliadas
+                                    </option>
+                                    <option value="nao_avaliadas" {{ request('filtro_avaliacao') === 'nao_avaliadas' ? 'selected' : '' }}>
+                                        ⏳ Torras não avaliadas
                                     </option>
                                 </select>
                             </div>
@@ -84,7 +81,6 @@
                                     <th>Fermentação</th>
                                     <th>Finalidade</th>
                                     <th>Status</th>
-                                    <th>Nota</th>
                                     <th>Criada em</th>
                                     <th>Ações</th>
                                 </tr>
@@ -98,7 +94,7 @@
                                     <td>{{ $torra->fermentacao }}</td>
                                     <td>{{ $torra->finalidade }}</td>
                                     <td>
-                                        @if($torra->status === 'avaliada')
+                                        @if($torra->avaliada)
                                             <span class="badge bg-success">
                                                 <i class="fas fa-check"></i> Avaliada
                                             </span>
@@ -107,24 +103,10 @@
                                                     por {{ $torra->avaliador_nome }} {{ $torra->avaliador_sobrenome }}
                                                 </small>
                                             @endif
-                                        @elseif($torra->status === 'aguardando_avaliacao')
-                                            <span class="badge bg-info">
-                                                <i class="fas fa-hourglass-half"></i> Aguardando Avaliação
-                                            </span>
                                         @else
                                             <span class="badge bg-warning">
                                                 <i class="fas fa-clock"></i> Não Avaliada
                                             </span>
-                                        @endif
-                                    </td>
-                                    <td class="text-center">
-                                        @if($torra->status === 'avaliada' && $torra->nota_final)
-                                            <div class="nota-final-destaque" style="font-size: 16px; font-weight: bold; color: #28a745;">
-                                                {{ number_format($torra->nota_final, 1) }}
-                                            </div>
-                                            <small class="text-muted"></small>
-                                        @else
-                                            <span class="text-muted">-</span>
                                         @endif
                                     </td>
                                     <td>{{ \Carbon\Carbon::parse($torra->criado_em)->format('d/m/Y H:i') }}</td>
@@ -137,38 +119,13 @@
                                             data-densidade="{{ $torra->densidade }}"
                                             data-fermentacao="{{ $torra->fermentacao }}"
                                             data-finalidade="{{ $torra->finalidade }}"
-                                            data-avaliada="{{ $torra->status }}"
+                                            data-avaliada="{{ $torra->avaliada }}"
                                             data-avaliador="{{ $torra->avaliador_nome ? $torra->avaliador_nome . ' ' . $torra->avaliador_sobrenome : '' }}"
                                             data-criada="{{ \Carbon\Carbon::parse($torra->criado_em)->format('d/m/Y H:i') }}"
-                                            data-nota-final="{{ $torra->nota_final ? number_format($torra->nota_final, 1) : '' }}"
-                                            data-produtor="{{ $torra->produtor_nome ? $torra->produtor_nome . ' ' . $torra->produtor_sobrenome : '' }}"
-                                            data-observacoes="{{ $torra->observacoes_produtor ?? '' }}"
-                                            data-aroma-po="{{ $torra->aroma_po ?? '' }}"
-                                            data-fragrancia-cafe="{{ $torra->fragrancia_cafe ?? '' }}"
-                                            data-sabor="{{ $torra->sabor ?? '' }}"
-                                            data-acidez="{{ $torra->acidez ?? '' }}"
-                                            data-corpo="{{ $torra->corpo ?? '' }}"
-                                            data-retro-gosto="{{ $torra->retro_gosto ?? '' }}"
-                                            data-equilibrio="{{ $torra->equilibrio ?? '' }}"
-                                            data-docura="{{ $torra->docura ?? '' }}"
-                                            data-uniformidade="{{ $torra->uniformidade ?? '' }}"
-                                            data-defeitos="{{ $torra->defeitos ?? '' }}"
-                                            data-balanceamento="{{ $torra->balanceamento ?? '' }}"
-                                            title="Ver detalhes completos"
+                                            title="Ver detalhes"
                                         >
                                             <i class="fas fa-eye"></i>
                                         </button>
-
-                                        @if($torra->status === 'nao_avaliada')
-                                            <a
-                                                href="{{ route('torras.solicitar-avaliacao') }}?torra_id={{ $torra->id }}"
-                                                class="btn btn-sm btn-outline-success me-1"
-                                                title="Solicitar avaliação"
-                                            >
-                                                <i class="fas fa-paper-plane"></i>
-                                            </a>
-                                        @endif
-
                                         <button
                                             class="btn btn-sm btn-outline-danger btn-excluir-torra"
                                             data-id="{{ $torra->id }}"
@@ -182,14 +139,6 @@
                                 @endforeach
                             </tbody>
                         </table>
-
-                        <!-- Paginação -->
-                        @if($torras->hasPages())
-                            <div class="d-flex justify-content-center mt-4">
-                                {{ $torras->appends(request()->query())->links() }}
-                            </div>
-                        @endif
-
                         @else
                             <div class="alert alert-info text-center">
                                 <h4>
@@ -236,6 +185,50 @@
                             </div>
                         @endif
                     </div>
+
+                    @if($torras->count() > 0)
+                    <!-- Estatísticas -->
+                    <div class="row mt-4">
+                        <div class="col-md-3">
+                            <div class="info-box bg-info">
+                                <span class="info-box-icon"><i class="fas fa-coffee"></i></span>
+                                <div class="info-box-content">
+                                    <span class="info-box-text">Total de Torras</span>
+                                    <span class="info-box-number">{{ $torras->count() }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="info-box bg-success">
+                                <span class="info-box-icon"><i class="fas fa-check"></i></span>
+                                <div class="info-box-content">
+                                    <span class="info-box-text">Avaliadas</span>
+                                    <span class="info-box-number">{{ $torras->where('avaliada', true)->count() }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="info-box bg-warning">
+                                <span class="info-box-icon"><i class="fas fa-clock"></i></span>
+                                <div class="info-box-content">
+                                    <span class="info-box-text">Pendentes</span>
+                                    <span class="info-box-number">{{ $torras->where('avaliada', false)->count() }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="info-box bg-primary">
+                                <span class="info-box-icon"><i class="fas fa-chart-line"></i></span>
+                                <div class="info-box-content">
+                                    <span class="info-box-text">Taxa Avaliação</span>
+                                    <span class="info-box-number">
+                                        {{ $torras->count() > 0 ? round(($torras->where('avaliada', true)->count() / $torras->count()) * 100) : 0 }}%
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @endif
                 </div>
             </div>
         </div>
@@ -248,7 +241,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="modalDetalhesTorraLabel">
-                    <i class="fas fa-coffee text-primary"></i> <span id="modalTitleText">Detalhes da Torra</span>
+                    <i class="fas fa-coffee text-primary"></i> Detalhes da Torra
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -315,163 +308,50 @@
 <script>
 $(document).ready(function() {
     // Ver detalhes da torra
-    $('.btn-ver-detalhes').on('click', function() {
-        const data = {
-            nome: $(this).data('nome'),
-            variedade: $(this).data('variedade'),
-            densidade: $(this).data('densidade'),
-            fermentacao: $(this).data('fermentacao'),
-            finalidade: $(this).data('finalidade'),
-            avaliada: $(this).data('avaliada'),
-            avaliador: $(this).data('avaliador'),
-            criada: $(this).data('criada'),
-            notaFinal: $(this).data('nota-final'),
-            produtor: $(this).data('produtor'),
-            observacoes: $(this).data('observacoes'),
-            aromaPo: $(this).data('aroma-po'),
-            fragrancia: $(this).data('fragrancia-cafe'),
-            sabor: $(this).data('sabor'),
-            acidez: $(this).data('acidez'),
-            corpo: $(this).data('corpo'),
-            retroGosto: $(this).data('retro-gosto'),
-            equilibrio: $(this).data('equilibrio'),
-            docura: $(this).data('docura'),
-            uniformidade: $(this).data('uniformidade'),
-            defeitos: $(this).data('defeitos'),
-            balanceamento: $(this).data('balanceamento')
-        };
+    $('.btn-ver-detalhes').on('click', function(e) {
+        e.preventDefault();
 
-        let content = '';
-
-        if (data.avaliada === 'avaliada' && data.notaFinal) {
-            // Modal completo com análise sensorial
-            const notaFinalNum = parseFloat(data.notaFinal);
-            let badgeClass = 'bg-secondary';
-            let classificacao = 'Comercial';
-
-            if (notaFinalNum >= 85) {
-                badgeClass = 'bg-success';
-                classificacao = 'Especial';
-            } else if (notaFinalNum >= 80) {
-                badgeClass = 'bg-warning text-dark';
-                classificacao = 'Muito Bom';
-            } else if (notaFinalNum >= 70) {
-                badgeClass = 'bg-info text-dark';
-                classificacao = 'Bom';
-            } else {
-                badgeClass = 'bg-danger';
-                classificacao = 'Abaixo do Padrão';
-            }
-
-            content = `
-                <!-- Informações da Torra -->
-                <div class="row mb-4">
-                    <div class="col-md-6">
-                        <h6><i class="fas fa-coffee"></i> Informações da Torra</h6>
-                        <table class="table table-sm">
-                            <tr><td><strong>Nome:</strong></td><td>${data.nome}</td></tr>
-                            <tr><td><strong>Variedade:</strong></td><td>${data.variedade}</td></tr>
-                            <tr><td><strong>Fermentação:</strong></td><td>${data.fermentacao}</td></tr>
-                            <tr><td><strong>Finalidade:</strong></td><td>${data.finalidade}</td></tr>
-                            <tr><td><strong>Densidade:</strong></td><td>${data.densidade} g/cm³</td></tr>
-                            <tr><td><strong>Criada em:</strong></td><td>${data.criada}</td></tr>
-                            ${data.observacoes ? `<tr><td><strong>Observações:</strong></td><td>${data.observacoes}</td></tr>` : ''}
-                        </table>
-                    </div>
-                    <div class="col-md-6">
-                        <h6><i class="fas fa-chart-bar"></i> Resultado da Análise</h6>
-                        <div class="text-center">
-                            <div class="mb-3">
-                                <span class="badge ${badgeClass} fs-2 p-3">
-                                    ${data.notaFinal}
-                                </span>
-                            </div>
-                            <h5 class="text-muted">${classificacao}</h5>
-                            ${notaFinalNum >= 85 ?
-                                `<i class="fas fa-award text-warning fa-2x"></i>
-                                 <p class="text-success mt-2"><strong>Café Especial!</strong></p>` : ''
+        const data = $(this).data();
+        const content = `
+            <div class="row">
+                <div class="col-md-6">
+                    <h6><i class="fas fa-tag text-primary"></i> Informações Básicas</h6>
+                    <table class="table table-borderless">
+                        <tr><td><strong>Nome:</strong></td><td>${data.nome}</td></tr>
+                        <tr><td><strong>Variedade:</strong></td><td>${data.variedade}</td></tr>
+                        <tr><td><strong>Densidade:</strong></td><td>${data.densidade}</td></tr>
+                        <tr><td><strong>Fermentação:</strong></td><td>${data.fermentacao}</td></tr>
+                        <tr><td><strong>Finalidade:</strong></td><td>${data.finalidade}</td></tr>
+                        <tr><td><strong>Criada em:</strong></td><td>${data.criada}</td></tr>
+                    </table>
+                </div>
+                <div class="col-md-6">
+                    <h6><i class="fas fa-clipboard-check text-success"></i> Status de Avaliação</h6>
+                    <div class="card">
+                        <div class="card-body">
+                            ${data.avaliada === '1' ?
+                                `<div class="text-success">
+                                    <i class="fas fa-check-circle fa-2x mb-2"></i>
+                                    <h5>Torra Avaliada</h5>
+                                    ${data.avaliador ? `<p>Avaliador: <strong>${data.avaliador}</strong></p>` : ''}
+                                </div>` :
+                                `<div class="text-warning">
+                                    <i class="fas fa-clock fa-2x mb-2"></i>
+                                    <h5>Aguardando Avaliação</h5>
+                                    <p>Esta torra ainda não foi avaliada.</p>
+                                </div>`
                             }
-                            ${data.avaliador ? `<p class="text-muted mt-3">Avaliado por: <strong>${data.avaliador}</strong></p>` : ''}
                         </div>
                     </div>
                 </div>
-
-                <!-- Detalhes da Avaliação -->
-                <h6><i class="fas fa-list"></i> Pontuações Detalhadas</h6>
-                <div class="row">
-                    <div class="col-md-6">
-                        <table class="table table-sm">
-                            <tr><td>Aroma do Pó:</td><td><strong>${parseFloat(data.aromaPo).toFixed(1)}</strong></td></tr>
-                            <tr><td>Fragrância do Café:</td><td><strong>${parseFloat(data.fragrancia).toFixed(1)}</strong></td></tr>
-                            <tr><td>Sabor:</td><td><strong>${parseFloat(data.sabor).toFixed(1)}</strong></td></tr>
-                            <tr><td>Acidez:</td><td><strong>${parseFloat(data.acidez).toFixed(1)}</strong></td></tr>
-                            <tr><td>Corpo:</td><td><strong>${parseFloat(data.corpo).toFixed(1)}</strong></td></tr>
-                            <tr><td>Retrogosto:</td><td><strong>${parseFloat(data.retroGosto).toFixed(1)}</strong></td></tr>
-                        </table>
-                    </div>
-                    <div class="col-md-6">
-                        <table class="table table-sm">
-                            <tr><td>Equilíbrio:</td><td><strong>${parseFloat(data.equilibrio).toFixed(1)}</strong></td></tr>
-                            <tr><td>Doçura:</td><td><strong>${parseFloat(data.docura).toFixed(1)}</strong></td></tr>
-                            <tr><td>Uniformidade:</td><td><strong>${parseFloat(data.uniformidade).toFixed(1)}</strong></td></tr>
-                            <tr><td>Defeitos:</td><td><strong>${parseFloat(data.defeitos).toFixed(1)}</strong></td></tr>
-                            <tr><td>Balanceamento:</td><td><strong>${parseFloat(data.balanceamento).toFixed(1)}</strong></td></tr>
-                            <tr class="table-success">
-                                <td><strong>Nota Final:</strong></td>
-                                <td><strong>${data.notaFinal}</strong></td>
-                            </tr>
-                        </table>
-                    </div>
-                </div>
-            `;
-        } else {
-            // Modal simples para torras não avaliadas
-            content = `
-                <div class="row">
-                    <div class="col-md-6">
-                        <h6><i class="fas fa-info-circle text-primary"></i> Informações da Torra</h6>
-                        <table class="table table-borderless">
-                            <tr><td><strong>Nome:</strong></td><td>${data.nome}</td></tr>
-                            <tr><td><strong>Variedade:</strong></td><td>${data.variedade}</td></tr>
-                            <tr><td><strong>Densidade:</strong></td><td>${data.densidade}</td></tr>
-                            <tr><td><strong>Fermentação:</strong></td><td>${data.fermentacao}</td></tr>
-                            <tr><td><strong>Finalidade:</strong></td><td>${data.finalidade}</td></tr>
-                            <tr><td><strong>Criada em:</strong></td><td>${data.criada}</td></tr>
-                        </table>
-                    </div>
-                    <div class="col-md-6">
-                        <h6><i class="fas fa-clipboard-check text-success"></i> Status de Avaliação</h6>
-                        <div class="card">
-                            <div class="card-body">
-                                ${data.avaliada === 'aguardando_avaliacao' ?
-                                    `<div class="text-info">
-                                        <i class="fas fa-hourglass-half fa-2x mb-2"></i>
-                                        <h5>Aguardando Avaliação</h5>
-                                        <p>Esta torra está na fila para ser avaliada.</p>
-                                    </div>` :
-                                    `<div class="text-warning">
-                                        <i class="fas fa-clock fa-2x mb-2"></i>
-                                        <h5>Não Avaliada</h5>
-                                        <p>Esta torra ainda não foi avaliada.</p>
-                                    </div>`
-                                }
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `;
-        }
-
-        // Atualizar título do modal
-        if (data.avaliada === 'avaliada' && data.notaFinal) {
-            $('#modalTitleText').html('<i class="fas fa-microscope me-2"></i>Detalhes da Análise - ' + data.nome);
-        } else {
-            $('#modalTitleText').html('Detalhes da Torra - ' + data.nome);
-        }
+            </div>
+        `;
 
         $('#modalDetalhesTorraContent').html(content);
         $('#modalDetalhesTorra').modal('show');
-    });    // Excluir torra
+    });
+
+    // Excluir torra
     $('.btn-excluir-torra').on('click', function(e) {
         e.preventDefault();
         const torraId = $(this).data('id');
