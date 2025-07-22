@@ -68,9 +68,9 @@ class ProdutorController extends Controller
             $solicitacoesRecentes = collect();
             $distribuicaoVariedades = collect();
 
-            if ($tabelaExiste && DB::getSchemaBuilder()->hasTable('solicitacoes_prova') && 
+            if ($tabelaExiste && DB::getSchemaBuilder()->hasTable('solicitacoes_prova') &&
                 DB::getSchemaBuilder()->hasTable('analise_sensorial')) {
-                
+
                 try {
                     // 5 melhores torras avaliadas (com maior nota final)
                     $melhoresTorras = DB::table('torras as t')
@@ -126,7 +126,7 @@ class ProdutorController extends Controller
 
         } catch (\Exception $e) {
             \Log::error('Erro no dashboard do produtor: ' . $e->getMessage());
-            
+
             // Em caso de erro, retornar dados vazios
             $estatisticas = [
                 'total_torras' => 0,

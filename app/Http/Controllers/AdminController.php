@@ -40,7 +40,7 @@ class AdminController extends Controller
                 'total_usuarios' => User::count(),
                 'total_torras' => $torrasExiste ? DB::table('torras')->count() : 0,
                 'total_analises' => $analisesExiste ? DB::table('analise_sensorial')->count() : 0,
-                'analises_pendentes' => ($solicitacoesExiste && $analisesExiste) ? 
+                'analises_pendentes' => ($solicitacoesExiste && $analisesExiste) ?
                     DB::table('solicitacoes_prova')
                         ->leftJoin('analise_sensorial', 'solicitacoes_prova.id', '=', 'analise_sensorial.solicitacao_id')
                         ->whereNull('analise_sensorial.id')
@@ -85,7 +85,7 @@ class AdminController extends Controller
 
         } catch (\Exception $e) {
             \Log::error('Erro no dashboard do admin: ' . $e->getMessage());
-            
+
             // Em caso de erro, dados básicos
             $estatisticas = [
                 'total_usuarios' => User::count(),
@@ -131,7 +131,7 @@ class AdminController extends Controller
             if (DB::getSchemaBuilder()->hasTable('torras')) {
                 DB::table('torras')->where('usuario_id', $id)->delete();
             }
-            
+
             if (DB::getSchemaBuilder()->hasTable('solicitacoes_prova')) {
                 DB::table('solicitacoes_prova')->where('analista_id', $id)->delete();
             }

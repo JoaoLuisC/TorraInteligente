@@ -25,16 +25,16 @@ class AnaliseController extends Controller
 
             // Estatísticas com verificação de tabelas
             $estatisticas = [
-                'pendentes' => ($solicitacoesExiste && DB::getSchemaBuilder()->hasColumn('solicitacoes_prova', 'status')) ? 
+                'pendentes' => ($solicitacoesExiste && DB::getSchemaBuilder()->hasColumn('solicitacoes_prova', 'status')) ?
                     DB::table('solicitacoes_prova')->where('status', 'Pendente')->count() : 0,
 
-                'em_analise' => ($solicitacoesExiste && DB::getSchemaBuilder()->hasColumn('solicitacoes_prova', 'status') && DB::getSchemaBuilder()->hasColumn('solicitacoes_prova', 'analista_id')) ? 
+                'em_analise' => ($solicitacoesExiste && DB::getSchemaBuilder()->hasColumn('solicitacoes_prova', 'status') && DB::getSchemaBuilder()->hasColumn('solicitacoes_prova', 'analista_id')) ?
                     DB::table('solicitacoes_prova')
                         ->where('status', 'Em Análise')
                         ->where('analista_id', $analistaId)
                         ->count() : 0,
 
-                'concluidas' => ($solicitacoesExiste && DB::getSchemaBuilder()->hasColumn('solicitacoes_prova', 'status') && DB::getSchemaBuilder()->hasColumn('solicitacoes_prova', 'analista_id')) ? 
+                'concluidas' => ($solicitacoesExiste && DB::getSchemaBuilder()->hasColumn('solicitacoes_prova', 'status') && DB::getSchemaBuilder()->hasColumn('solicitacoes_prova', 'analista_id')) ?
                     DB::table('solicitacoes_prova')
                         ->where('status', 'Concluída')
                         ->where('analista_id', $analistaId)
@@ -91,7 +91,7 @@ class AnaliseController extends Controller
 
         } catch (\Exception $e) {
             \Log::error('Erro no dashboard do analista: ' . $e->getMessage());
-            
+
             // Em caso de erro, dados básicos
             $estatisticas = [
                 'pendentes' => 0,
@@ -117,10 +117,10 @@ class AnaliseController extends Controller
 
         try {
             // Verificar se as tabelas existem
-            if (!DB::getSchemaBuilder()->hasTable('solicitacoes_prova') || 
+            if (!DB::getSchemaBuilder()->hasTable('solicitacoes_prova') ||
                 !DB::getSchemaBuilder()->hasTable('torras') ||
                 !DB::getSchemaBuilder()->hasColumn('solicitacoes_prova', 'status')) {
-                
+
                 // Se as tabelas não existem, retornar vista vazia
                 $solicitacoesPendentes = collect()->paginate(10);
                 return view('analise.pendentes', compact('solicitacoesPendentes'));
@@ -160,11 +160,11 @@ class AnaliseController extends Controller
 
         try {
             // Verificar se as tabelas existem
-            if (!DB::getSchemaBuilder()->hasTable('analise_sensorial') || 
+            if (!DB::getSchemaBuilder()->hasTable('analise_sensorial') ||
                 !DB::getSchemaBuilder()->hasTable('solicitacoes_prova') ||
                 !DB::getSchemaBuilder()->hasTable('torras') ||
                 !DB::getSchemaBuilder()->hasColumn('solicitacoes_prova', 'analista_id')) {
-                
+
                 // Se as tabelas não existem, retornar vista vazia
                 $analises = collect()->paginate(10);
                 return view('analise.historico', compact('analises'));

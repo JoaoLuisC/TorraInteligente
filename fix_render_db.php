@@ -112,7 +112,7 @@ executeSQL("ALTER SEQUENCE analise_sensorial_id_seq RESTART WITH 1", "Sequência
 echo "\n11. Criando usuário administrador padrão...\n";
 $senhaHash = password_hash('admin123', PASSWORD_DEFAULT);
 $sqlAdmin = "
-INSERT INTO usuarios (nome, sobrenome, tipo, email, senha, criado_em, created_at, updated_at) 
+INSERT INTO usuarios (nome, sobrenome, tipo, email, senha, criado_em, created_at, updated_at)
 VALUES ('Admin', 'Sistema', 'Administrador', 'admin@torrainteligente.com', '$senhaHash', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
 ";
 executeSQL($sqlAdmin, "Usuário administrador criado (admin@torrainteligente.com / admin123)");

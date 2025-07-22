@@ -14,7 +14,7 @@
                     <p>O sistema está sendo configurado. Algumas funcionalidades podem estar temporariamente indisponíveis.</p>
                     <p>Se você é um administrador, verifique se todas as tabelas do banco de dados foram criadas corretamente.</p>
                 </div>
-                
+
                 <div class="card">
                     <div class="card-header">
                         <h3 class="card-title">

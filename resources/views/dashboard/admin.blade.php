@@ -278,7 +278,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     const ctx = document.getElementById('usuariosChart').getContext('2d');
     const dados = @json($distribuicaoUsuarios);
-    
+
     const labels = dados.map(item => item.tipo);
     const values = dados.map(item => item.total);
     const colors = labels.map(tipo => {
