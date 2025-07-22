@@ -29,69 +29,83 @@ class AdminController extends Controller
             return redirect()->route('login');
         }
 
-        // Estatísticas principais
-        $estatisticas = [
-            'total_usuarios' => User::count(),
-            'total_torras' => DB::table('torras')->count(),
-            'total_analises' => DB::table('analise_sensorial')->count(),
-            'analises_pendentes' => DB::table('solicitacoes_prova')
-                ->leftJoin('analise_sensorial', 'solicitacoes_prova.id', '=', 'analise_sensorial.solicitacao_id')
-                ->whereNull('analise_sensorial.id')
-                ->count(),
-            'produtores' => User::where('tipo', 'Produtor')->count(),
-            'analistas' => User::where('tipo', 'Analista')->count(),
-            'administradores' => User::where('tipo', 'Administrador')->count(),
-        ];
+        try {
+            // Verificar se as tabelas existem
+            $torrasExiste = DB::getSchemaBuilder()->hasTable('torras');
+            $analisesExiste = DB::getSchemaBuilder()->hasTable('analise_sensorial');
+            $solicitacoesExiste = DB::getSchemaBuilder()->hasTable('solicitacoes_prova');
 
-        // Usuários recentes (últimos 5)
-        $usuariosRecentes = User::orderBy('criado_em', 'desc')->limit(5)->get();
+            // Estatísticas principais
+            $estatisticas = [
+                'total_usuarios' => User::count(),
+                'total_torras' => $torrasExiste ? DB::table('torras')->count() : 0,
+                'total_analises' => $analisesExiste ? DB::table('analise_sensorial')->count() : 0,
+                'analises_pendentes' => ($solicitacoesExiste && $analisesExiste) ? 
+                    DB::table('solicitacoes_prova')
+                        ->leftJoin('analise_sensorial', 'solicitacoes_prova.id', '=', 'analise_sensorial.solicitacao_id')
+                        ->whereNull('analise_sensorial.id')
+                        ->count() : 0,
+                'produtores' => User::where('tipo', 'Produtor')->count(),
+                'analistas' => User::where('tipo', 'Analista')->count(),
+                'administradores' => User::where('tipo', 'Administrador')->count(),
+            ];
 
-        // Análises recentes (últimas 5)
-        $analisesRecentes = DB::table('analise_sensorial as a')
-            ->join('solicitacoes_prova as sp', 'a.solicitacao_id', '=', 'sp.id')
-            ->join('torras as t', 'sp.torra_id', '=', 't.id')
-            ->join('usuarios as u', 't.usuario_id', '=', 'u.id')
-            ->select(
-                'a.*',
-                't.nome as torra_nome',
-                'u.nome as produtor_nome',
-                'a.created_at as data_analise'
-            )
-            ->orderBy('a.created_at', 'desc')
-            ->limit(5)
-            ->get()
-            ->map(function($analise) {
-                $analise->data_analise = \Carbon\Carbon::parse($analise->data_analise);
-                return $analise;
-            });
+            // Usuários recentes (últimos 5)
+            $usuariosRecentes = User::orderBy('criado_em', 'desc')->limit(5)->get();
 
-        // Dados para gráfico de análises por mês (últimos 6 meses)
-        $mesesAnalises = [];
-        $dadosAnalises = [];
+            // Análises recentes (últimas 5) - só se as tabelas existirem
+            $analisesRecentes = collect();
+            if ($analisesExiste && $solicitacoesExiste && $torrasExiste) {
+                try {
+                    $analisesRecentes = DB::table('analise_sensorial as a')
+                        ->join('solicitacoes_prova as sp', 'a.solicitacao_id', '=', 'sp.id')
+                        ->join('torras as t', 'sp.torra_id', '=', 't.id')
+                        ->join('usuarios as produtor', 't.usuario_id', '=', 'produtor.id')
+                        ->join('usuarios as analista', 'sp.analista_id', '=', 'analista.id')
+                        ->select(
+                            'a.*',
+                            't.nome as torra_nome',
+                            'produtor.nome as produtor_nome',
+                            'produtor.sobrenome as produtor_sobrenome',
+                            'analista.nome as analista_nome',
+                            'analista.sobrenome as analista_sobrenome'
+                        )
+                        ->orderBy('a.criado_em', 'desc')
+                        ->limit(5)
+                        ->get();
+                } catch (\Exception $e) {
+                    \Log::warning('Erro nas análises recentes: ' . $e->getMessage());
+                }
+            }
 
-        for ($i = 5; $i >= 0; $i--) {
-            $data = now()->subMonths($i);
-            $mes = $data->format('M/Y');
-            $count = DB::table('analise_sensorial')
-                ->whereYear('created_at', $data->year)
-                ->whereMonth('created_at', $data->month)
-                ->count();
+            // Distribuição de tipos de usuários
+            $distribuicaoUsuarios = User::select('tipo', DB::raw('count(*) as total'))
+                ->groupBy('tipo')
+                ->get();
 
-            $mesesAnalises[] = $mes;
-            $dadosAnalises[] = $count;
+        } catch (\Exception $e) {
+            \Log::error('Erro no dashboard do admin: ' . $e->getMessage());
+            
+            // Em caso de erro, dados básicos
+            $estatisticas = [
+                'total_usuarios' => User::count(),
+                'total_torras' => 0,
+                'total_analises' => 0,
+                'analises_pendentes' => 0,
+                'produtores' => User::where('tipo', 'Produtor')->count(),
+                'analistas' => User::where('tipo', 'Analista')->count(),
+                'administradores' => User::where('tipo', 'Administrador')->count(),
+            ];
+            $usuariosRecentes = User::orderBy('criado_em', 'desc')->limit(5)->get();
+            $analisesRecentes = collect();
+            $distribuicaoUsuarios = collect();
         }
 
-        $graficoAnalises = [
-            'labels' => $mesesAnalises,
-            'data' => $dadosAnalises
-        ];
-
-        return view('admin.dashboard', compact(
+        return view('dashboard.admin', compact(
             'estatisticas',
             'usuariosRecentes',
             'analisesRecentes',
-            'graficoAnalises'
-        ));
+            'distribuicaoUsuarios'
     }
 
     public function excluirUsuario($id)
@@ -113,10 +127,20 @@ class AdminController extends Controller
         }
 
         try {
+            // Verificar se as tabelas relacionadas existem antes de tentar deletar relacionamentos
+            if (DB::getSchemaBuilder()->hasTable('torras')) {
+                DB::table('torras')->where('usuario_id', $id)->delete();
+            }
+            
+            if (DB::getSchemaBuilder()->hasTable('solicitacoes_prova')) {
+                DB::table('solicitacoes_prova')->where('analista_id', $id)->delete();
+            }
+
             $usuario->delete();
             return redirect()->route('admin.usuarios')
                 ->with('success', 'Usuário excluído com sucesso!');
         } catch (\Exception $e) {
+            \Log::error('Erro ao excluir usuário: ' . $e->getMessage());
             return redirect()->route('admin.usuarios')
                 ->with('error', 'Erro ao excluir usuário: ' . $e->getMessage());
         }

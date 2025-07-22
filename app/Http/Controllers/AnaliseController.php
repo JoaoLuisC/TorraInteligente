@@ -17,56 +17,90 @@ class AnaliseController extends Controller
 
         $analistaId = Auth::id();
 
-        // Estatísticas
-        $estatisticas = [
-            'pendentes' => DB::table('solicitacoes_prova')
-                ->where('status', 'Pendente')
-                ->count(),
+        try {
+            // Verificar se as tabelas existem
+            $solicitacoesExiste = DB::getSchemaBuilder()->hasTable('solicitacoes_prova');
+            $analisesExiste = DB::getSchemaBuilder()->hasTable('analise_sensorial');
+            $torrasExiste = DB::getSchemaBuilder()->hasTable('torras');
 
-            'em_analise' => DB::table('solicitacoes_prova')
-                ->where('status', 'Em Análise')
-                ->where('analista_id', $analistaId)
-                ->count(),
+            // Estatísticas com verificação de tabelas
+            $estatisticas = [
+                'pendentes' => ($solicitacoesExiste && DB::getSchemaBuilder()->hasColumn('solicitacoes_prova', 'status')) ? 
+                    DB::table('solicitacoes_prova')->where('status', 'Pendente')->count() : 0,
 
-            'concluidas' => DB::table('solicitacoes_prova')
-                ->where('status', 'Concluída')
-                ->where('analista_id', $analistaId)
-                ->count(),
-        ];
+                'em_analise' => ($solicitacoesExiste && DB::getSchemaBuilder()->hasColumn('solicitacoes_prova', 'status') && DB::getSchemaBuilder()->hasColumn('solicitacoes_prova', 'analista_id')) ? 
+                    DB::table('solicitacoes_prova')
+                        ->where('status', 'Em Análise')
+                        ->where('analista_id', $analistaId)
+                        ->count() : 0,
 
-        // Solicitações pendentes (últimas 5) - todas as pendentes disponíveis
-        $solicitacoesPendentes = DB::table('solicitacoes_prova as sp')
-            ->join('torras as t', 'sp.torra_id', '=', 't.id')
-            ->join('usuarios as produtor', 't.usuario_id', '=', 'produtor.id')
-            ->where('sp.status', 'Pendente')
-            ->select(
-                'sp.*',
-                't.nome as torra_nome',
-                't.variedade',
-                't.finalidade',
-                'produtor.nome as produtor_nome'
-            )
-            ->orderBy('sp.criado_em', 'desc')
-            ->limit(5)
-            ->get();
+                'concluidas' => ($solicitacoesExiste && DB::getSchemaBuilder()->hasColumn('solicitacoes_prova', 'status') && DB::getSchemaBuilder()->hasColumn('solicitacoes_prova', 'analista_id')) ? 
+                    DB::table('solicitacoes_prova')
+                        ->where('status', 'Concluída')
+                        ->where('analista_id', $analistaId)
+                        ->count() : 0,
+            ];
 
-        // Análises recentes (últimas 5)
-        $analisesRecentes = DB::table('analise_sensorial as a')
-            ->join('solicitacoes_prova as sp', 'a.solicitacao_id', '=', 'sp.id')
-            ->join('torras as t', 'sp.torra_id', '=', 't.id')
-            ->join('usuarios as produtor', 't.usuario_id', '=', 'produtor.id')
-            ->where('sp.analista_id', $analistaId)
-            ->select(
-                'a.*',
-                't.nome as torra_nome',
-                't.variedade',
-                't.finalidade',
-                'produtor.nome as produtor_nome',
-                'a.created_at as data_analise'
-            )
-            ->orderBy('a.created_at', 'desc')
-            ->limit(5)
-            ->get();
+            // Solicitações pendentes (últimas 5) - só se as tabelas existirem
+            $solicitacoesPendentes = collect();
+            if ($solicitacoesExiste && $torrasExiste && DB::getSchemaBuilder()->hasColumn('solicitacoes_prova', 'status')) {
+                try {
+                    $solicitacoesPendentes = DB::table('solicitacoes_prova as sp')
+                        ->join('torras as t', 'sp.torra_id', '=', 't.id')
+                        ->join('usuarios as produtor', 't.usuario_id', '=', 'produtor.id')
+                        ->where('sp.status', 'Pendente')
+                        ->select(
+                            'sp.*',
+                            't.nome as torra_nome',
+                            't.variedade',
+                            't.finalidade',
+                            'produtor.nome as produtor_nome'
+                        )
+                        ->orderBy('sp.criado_em', 'desc')
+                        ->limit(5)
+                        ->get();
+                } catch (\Exception $e) {
+                    \Log::warning('Erro nas solicitações pendentes: ' . $e->getMessage());
+                }
+            }
+
+            // Análises recentes (últimas 5) - só se as tabelas existirem
+            $analisesRecentes = collect();
+            if ($analisesExiste && $solicitacoesExiste && $torrasExiste && DB::getSchemaBuilder()->hasColumn('solicitacoes_prova', 'analista_id')) {
+                try {
+                    $analisesRecentes = DB::table('analise_sensorial as a')
+                        ->join('solicitacoes_prova as sp', 'a.solicitacao_id', '=', 'sp.id')
+                        ->join('torras as t', 'sp.torra_id', '=', 't.id')
+                        ->join('usuarios as produtor', 't.usuario_id', '=', 'produtor.id')
+                        ->where('sp.analista_id', $analistaId)
+                        ->select(
+                            'a.*',
+                            't.nome as torra_nome',
+                            't.variedade',
+                            't.finalidade',
+                            'produtor.nome as produtor_nome',
+                            'a.created_at as data_analise'
+                        )
+                        ->orderBy('a.created_at', 'desc')
+                        ->limit(5)
+                        ->get();
+                } catch (\Exception $e) {
+                    \Log::warning('Erro nas análises recentes: ' . $e->getMessage());
+                }
+            }
+
+        } catch (\Exception $e) {
+            \Log::error('Erro no dashboard do analista: ' . $e->getMessage());
+            
+            // Em caso de erro, dados básicos
+            $estatisticas = [
+                'pendentes' => 0,
+                'em_analise' => 0,
+                'concluidas' => 0,
+            ];
+            $solicitacoesPendentes = collect();
+            $analisesRecentes = collect();
+        }
 
         return view('analise.dashboard', compact(
             'estatisticas',
@@ -81,23 +115,39 @@ class AnaliseController extends Controller
             return redirect()->route('login');
         }
 
-        // Buscar solicitações pendentes (sem analista atribuído ou para este analista)
-        $solicitacoesPendentes = DB::table('solicitacoes_prova as sp')
-            ->join('torras as t', 'sp.torra_id', '=', 't.id')
-            ->join('usuarios as produtor', 't.usuario_id', '=', 'produtor.id')
-            ->where('sp.status', 'Pendente')
-            ->select(
-                'sp.*',
-                't.nome as torra_nome',
-                't.variedade as torra_variedade',
-                't.fermentacao as torra_fermentacao',
-                't.finalidade as torra_finalidade',
-                't.densidade as torra_densidade',
-                'produtor.nome as produtor_nome',
-                'produtor.sobrenome as produtor_sobrenome'
-            )
-            ->orderBy('sp.criado_em', 'asc')
-            ->paginate(10);
+        try {
+            // Verificar se as tabelas existem
+            if (!DB::getSchemaBuilder()->hasTable('solicitacoes_prova') || 
+                !DB::getSchemaBuilder()->hasTable('torras') ||
+                !DB::getSchemaBuilder()->hasColumn('solicitacoes_prova', 'status')) {
+                
+                // Se as tabelas não existem, retornar vista vazia
+                $solicitacoesPendentes = collect()->paginate(10);
+                return view('analise.pendentes', compact('solicitacoesPendentes'));
+            }
+
+            // Buscar solicitações pendentes (sem analista atribuído ou para este analista)
+            $solicitacoesPendentes = DB::table('solicitacoes_prova as sp')
+                ->join('torras as t', 'sp.torra_id', '=', 't.id')
+                ->join('usuarios as produtor', 't.usuario_id', '=', 'produtor.id')
+                ->where('sp.status', 'Pendente')
+                ->select(
+                    'sp.*',
+                    't.nome as torra_nome',
+                    't.variedade as torra_variedade',
+                    't.fermentacao as torra_fermentacao',
+                    't.finalidade as torra_finalidade',
+                    't.densidade as torra_densidade',
+                    'produtor.nome as produtor_nome',
+                    'produtor.sobrenome as produtor_sobrenome'
+                )
+                ->orderBy('sp.criado_em', 'asc')
+                ->paginate(10);
+
+        } catch (\Exception $e) {
+            \Log::error('Erro ao buscar solicitações pendentes: ' . $e->getMessage());
+            $solicitacoesPendentes = collect()->paginate(10);
+        }
 
         return view('analise.pendentes', compact('solicitacoesPendentes'));
     }
@@ -108,16 +158,43 @@ class AnaliseController extends Controller
             return redirect()->route('login');
         }
 
-        // Buscar histórico de análises realizadas
-        $analises = DB::table('analise_sensorial as a')
-            ->join('solicitacoes_prova as sp', 'a.solicitacao_id', '=', 'sp.id')
-            ->join('torras as t', 'sp.torra_id', '=', 't.id')
-            ->join('usuarios as produtor', 't.usuario_id', '=', 'produtor.id')
-            ->select(
-                'a.*',
-                'sp.id as solicitacao_id',
-                't.nome as torra_nome',
-                't.variedade as torra_variedade',
+        try {
+            // Verificar se as tabelas existem
+            if (!DB::getSchemaBuilder()->hasTable('analise_sensorial') || 
+                !DB::getSchemaBuilder()->hasTable('solicitacoes_prova') ||
+                !DB::getSchemaBuilder()->hasTable('torras') ||
+                !DB::getSchemaBuilder()->hasColumn('solicitacoes_prova', 'analista_id')) {
+                
+                // Se as tabelas não existem, retornar vista vazia
+                $analises = collect()->paginate(10);
+                return view('analise.historico', compact('analises'));
+            }
+
+            // Buscar histórico de análises realizadas
+            $analises = DB::table('analise_sensorial as a')
+                ->join('solicitacoes_prova as sp', 'a.solicitacao_id', '=', 'sp.id')
+                ->join('torras as t', 'sp.torra_id', '=', 't.id')
+                ->join('usuarios as produtor', 't.usuario_id', '=', 'produtor.id')
+                ->where('sp.analista_id', Auth::id())
+                ->select(
+                    'a.*',
+                    'sp.id as solicitacao_id',
+                    't.nome as torra_nome',
+                    't.variedade as torra_variedade',
+                    't.finalidade as torra_finalidade',
+                    'produtor.nome as produtor_nome',
+                    'produtor.sobrenome as produtor_sobrenome'
+                )
+                ->orderBy('a.created_at', 'desc')
+                ->paginate(10);
+
+        } catch (\Exception $e) {
+            \Log::error('Erro ao buscar histórico de análises: ' . $e->getMessage());
+            $analises = collect()->paginate(10);
+        }
+
+        return view('analise.historico', compact('analises'));
+    }
                 't.fermentacao as torra_fermentacao',
                 't.finalidade as torra_finalidade',
                 't.densidade as torra_densidade',
