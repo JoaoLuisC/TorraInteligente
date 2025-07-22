@@ -30,9 +30,10 @@ mkdir -p bootstrap/cache
 echo "📋 Inicializando estrutura do banco..."
 php artisan db:init || echo "DB init falhou, continuando..."
 
-# Executar migrações Laravel
+# Executar migrações Laravel com reset completo
 echo "📋 Executando migrações Laravel..."
-php artisan migrate --force || echo "Migrate falhou, continuando..."
+echo "🔄 Resetando banco de dados para resolver conflitos de migração..."
+php artisan migrate:fresh --force || echo "Migrate fresh falhou, continuando..."
 
 # Limpar cache depois que as tabelas estão criadas
 echo "🧹 Limpando cache..."
