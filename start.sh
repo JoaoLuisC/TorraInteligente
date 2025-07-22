@@ -1,5 +1,15 @@
 #!/usr/bin/env bash
-# Render start script
+# Render# Corrigir problemas do banco no Render
+echo "🔧 Corrigindo estrutura do banco de dados..."
+php fix_render_db.php || echo "Fix DB falhou, continuando..."
+
+# Executar migrações Laravel (só as básicas do Laravel)
+echo "📋 Executando migrações básicas..."
+php artisan migrate:install --force || echo "Migrate install falhou"
+
+# Criar dados iniciais
+echo "🌱 Criando dados iniciais..."
+php artisan db:seed --class=InitialDataSeeder --force || echo "Seed falhou, continuando..."script
 
 echo "🚀 Iniciando aplicação Laravel..."
 
@@ -26,13 +36,13 @@ mkdir -p storage/framework/sessions
 mkdir -p storage/framework/views
 mkdir -p bootstrap/cache
 
-# Inicializar estrutura do banco primeiro
-echo "📋 Inicializando estrutura do banco..."
-php artisan db:init || echo "DB init falhou, continuando..."
+# Corrigir problemas do banco no Render
+echo "� Corrigindo estrutura do banco de dados..."
+php fix_render_db.php || echo "Fix DB falhou, continuando..."
 
-# Executar migrações Laravel
-echo "📋 Executando migrações Laravel..."
-php artisan migrate --force || echo "Migrate falhou, continuando..."
+# Executar migrações Laravel (só as básicas do Laravel)
+echo "📋 Executando migrações básicas..."
+php artisan migrate:install --force || echo "Migrate install falhou"
 
 # Limpar cache depois que as tabelas estão criadas
 echo "🧹 Limpando cache..."
