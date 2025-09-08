@@ -25,7 +25,11 @@
 #define CONFIG_FLAG 0xAA
 
 // URL do servidor (pode ser alterada via configuração futura)
-#define DEFAULT_SERVER_URL "http://192.168.47.41/Tecnologia-Aplicada-Torra-do-Caf-/DadosTeste.php"
+#define DEFAULT_SERVER_URL "https://seuapp.onrender.com/api/sensor/dados"
+
+// Configurações do sensor de temperatura
+#define TEMP_SENSOR_PIN A0
+#define TEMP_SAMPLES 10      // Número de amostras para média
 
 // Limites de tamanho
 #define MAX_SSID_LENGTH 32

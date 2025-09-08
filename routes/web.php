@@ -28,6 +28,11 @@ Route::post('/logout', [App\Http\Controllers\Auth\LoginController::class, 'logou
 // Torradores
 Route::middleware('auth')->group(function () {
 
+    // Monitor de Sensores - Tempo Real
+    Route::get('/monitor/realtime', [App\Http\Controllers\MonitorController::class, 'realtime'])->name('monitor.realtime');
+    Route::get('/monitor/dashboard', [App\Http\Controllers\MonitorController::class, 'dashboard'])->name('monitor.dashboard');
+    Route::get('/monitor/historico', [App\Http\Controllers\MonitorController::class, 'historico'])->name('monitor.historico');
+
     // Debug route - temporária para solicitações pendentes
     Route::get('/debug-pendentes', function () {
         $pendentes = DB::table('solicitacoes_prova')->where('status', 'Pendente')->get();

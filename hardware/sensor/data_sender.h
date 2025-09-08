@@ -81,10 +81,28 @@ public:
     }
 
 private:
+    // Lê temperatura do sensor
+    static float lerTemperatura() {
+        float soma = 0;
+        for (int i = 0; i < TEMP_SAMPLES; i++) {
+            int leitura = analogRead(TEMP_SENSOR_PIN);
+            // Conversão para temperatura (ajustar conforme seu sensor)
+            // Exemplo para LM35: (leitura * 3.3 / 1024) * 100
+            float temp = (leitura * 3.3 / 1024) * 100;
+            soma += temp;
+            delay(10);
+        }
+        return soma / TEMP_SAMPLES;
+    }
+
     // Monta string de dados para POST
     static String montarDadosPost(const String& deviceKey) {
+        float temperatura = lerTemperatura();
+        unsigned long tempoSegundos = millis() / 1000;
+
         return "device_key=" + deviceKey +
-               "&valor=" + String(contadorDados + 1) +
+               "&temperatura=" + String(temperatura, 2) +
+               "&tempo=" + String(tempoSegundos) +
                "&timestamp=" + String(millis()) +
                "&rssi=" + String(WiFi.RSSI()) +
                "&uptime=" + String(millis() / 1000) +
