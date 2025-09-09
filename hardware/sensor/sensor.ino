@@ -27,10 +27,19 @@
 #include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>
 #include <DNSServer.h>
+#include <max6675.h>
 
 // ========== OBJETOS GLOBAIS ==========
 ESP8266WebServer server(SERVER_PORT);
 DNSServer dnsServer;
+
+// Configurações MAX6675
+int SO = 0;
+int CS = 1;
+int CLK = 2;
+
+// Configuração do MAX6675 usando pinos definidos em config.h
+MAX6675 termopar(CLK, CS, SO);
 
 // ========== VARIÁVEIS GLOBAIS ==========
 String ssid = "";
@@ -122,6 +131,27 @@ void setup() {
     Serial.println("🌡️ SENSOR TORRA INTELIGENTE v" FIRMWARE_VERSION);
     Serial.println("========================================");
 
+    // Inicializa e testa o sensor MAX6675
+    Serial.println("🌡️ Inicializando sensor de temperatura...");
+    delay(500); // Aguarda estabilizar
+
+    // Teste de leitura inicial
+    double temperaturaInicial = termopar.readCelsius();
+    if (isnan(temperaturaInicial)) {
+        Serial.println("⚠️ AVISO: Sensor MAX6675 não detectado ou com problema!");
+        Serial.println("📋 Verifique as conexões dos pinos:");
+        Serial.println("   SO (Serial Out) -> GPIO0");
+        Serial.println("   CS (Chip Select) -> GPIO1");
+        Serial.println("   CLK (Serial Clock) -> GPIO2");
+        Serial.println("   VCC -> 3.3V ou 5V");
+        Serial.println("   GND -> GND");
+    } else {
+        Serial.println("✅ Sensor MAX6675 detectado!");
+        Serial.print("🌡️ Temperatura inicial: ");
+        Serial.print(temperaturaInicial);
+        Serial.println("°C");
+    }
+
     // Tenta carregar configuração existente
     if (EEPROMManager::loadConfig(ssid, password, deviceKey)) {
         Serial.println("📋 Configuração encontrada!");
@@ -190,11 +220,21 @@ void loop() {
         }
     }
 
+    // Leitura do sensor de temperatura (MAX6675)
+    double temperatura = termopar.readCelsius();
+    if (isnan(temperatura)) {
+        Serial.println("❌ Erro na leitura do termopar MAX6675!");
+    } else {
+        Serial.print("🌡️ Temperatura: ");
+        Serial.print(temperatura);
+        Serial.println("°C");
+    }
+
     // Envia dados se conectado e no intervalo correto
     if (wifiConectado && agora >= proximoEnvio) {
         proximoEnvio = agora + INTERVALO_ENVIO;
 
-        if (DataSender::enviarDados(deviceKey)) {
+        if (DataSender::enviarDados(deviceKey, temperatura)) {
             if (DEBUG_ENABLED) {
                 Serial.println("📊 " + DataSender::obterEstatisticas());
             }

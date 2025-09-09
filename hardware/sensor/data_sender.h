@@ -18,8 +18,8 @@ public:
         serverURL = url;
     }
 
-    // Envia dados para o servidor
-    static bool enviarDados(const String& deviceKey) {
+    // Envia dados para o servidor incluindo temperatura do MAX6675
+    static bool enviarDados(const String& deviceKey, float temperatura = NAN) {
         if (WiFi.status() != WL_CONNECTED) {
             Serial.println("❌ WiFi desconectado - não é possível enviar dados");
             return false;
@@ -35,7 +35,7 @@ public:
         http.addHeader("User-Agent", "ESP8266-TorraInteligente/" FIRMWARE_VERSION);
 
         // Monta dados para envio
-        String dadosPost = montarDadosPost(deviceKey);
+        String dadosPost = montarDadosPost(deviceKey, temperatura);
 
         if (DEBUG_ENABLED) {
             Serial.println("📤 Enviando: " + dadosPost);
@@ -81,33 +81,25 @@ public:
     }
 
 private:
-    // Lê temperatura do sensor
-    static float lerTemperatura() {
-        float soma = 0;
-        for (int i = 0; i < TEMP_SAMPLES; i++) {
-            int leitura = analogRead(TEMP_SENSOR_PIN);
-            // Conversão para temperatura (ajustar conforme seu sensor)
-            // Exemplo para LM35: (leitura * 3.3 / 1024) * 100
-            float temp = (leitura * 3.3 / 1024) * 100;
-            soma += temp;
-            delay(10);
-        }
-        return soma / TEMP_SAMPLES;
-    }
-
     // Monta string de dados para POST
-    static String montarDadosPost(const String& deviceKey) {
-        float temperatura = lerTemperatura();
+    static String montarDadosPost(const String& deviceKey, float temperatura = NAN) {
         unsigned long tempoSegundos = millis() / 1000;
-
-        return "device_key=" + deviceKey +
-               "&temperatura=" + String(temperatura, 2) +
-               "&tempo=" + String(tempoSegundos) +
-               "&timestamp=" + String(millis()) +
-               "&rssi=" + String(WiFi.RSSI()) +
-               "&uptime=" + String(millis() / 1000) +
-               "&free_heap=" + String(ESP.getFreeHeap()) +
-               "&version=" + String(FIRMWARE_VERSION);
+        
+        String dados = "device_key=" + deviceKey +
+                      "&timestamp=" + String(millis()) +
+                      "&rssi=" + String(WiFi.RSSI()) +
+                      "&uptime=" + String(tempoSegundos) +
+                      "&free_heap=" + String(ESP.getFreeHeap()) +
+                      "&version=" + String(FIRMWARE_VERSION);
+        
+        // Adiciona temperatura se disponível
+        if (!isnan(temperatura)) {
+            dados += "&temperatura=" + String(temperatura, 2);
+        } else {
+            dados += "&temperatura=ERROR";
+        }
+        
+        return dados;
     }
 };
 
